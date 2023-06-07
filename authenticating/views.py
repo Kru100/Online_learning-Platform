@@ -14,7 +14,9 @@ def registerAPI(request):
             age = request.POST.get('age')
             qualification = request.POST.get('qualification')
             password = request.POST.get('password')
+            print(password + 'Krunal')
             hashed_password = make_password(password)
+            print(hashed_password)
             role = request.POST.get('role')
             if role == 'student':
                 is_student = True
@@ -45,19 +47,40 @@ def otp(request):
     try:
         if request.method == 'POST':
             email = request.session.get('email')
-            print(email)
             user1 = User.objects.filter(email=email).first()
-            print(user1)
             otp = request.POST.get('otp')
-            print(type(otp))
-            print(type(user1.otp))
             if user1.otp != int(otp):
-                print(1)
                 msg = "Invalid OTP"
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'otp.html')
-            return redirect('/')
+            user1.is_verified = True
+            user1.save()
+            return redirect('login')
         return render(request, 'otp.html')
+    except Exception as e:
+        print(e)
+        
+def loginAPI(request):
+    try:
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                msg = 'Invalid Email or Password'
+                messages.add_message(request, messages.INFO, msg)                
+                return render(request, 'login.html')
+            if user.is_verified is False:
+                msg = 'Verify Your Account'
+                messages.add_message(request, messages.INFO, msg)                
+                return render(request, 'login.html')
+            if user.email != email or check_password(password,user.password) is False:
+                msg = 'Invalid Email or Password'
+                messages.add_message(request, messages.INFO, msg)
+                return render(request, 'login.html')
+            
+            return redirect('/')    
+        return render(request, 'login.html')
     except Exception as e:
         print(e)
         
