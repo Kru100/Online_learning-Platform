@@ -11,3 +11,8 @@ def OTP_email(email):
     user_obj = User.objects.get(email=email)
     user_obj.otp = OTP 
     user_obj.save()
+    
+def Forget_password(email, token):
+    subject = 'Your Password Reset Link'
+    message = f'Go to this link and reset your password http://127.0.0.1:8000/change_password/{token}/'
+    send_mail(subject, message, "educator.organiation123@gmail.com", [email],fail_silently=False)

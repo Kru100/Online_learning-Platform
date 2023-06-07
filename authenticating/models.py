@@ -23,4 +23,5 @@ class User(models.Model):
     is_instructor = models.BooleanField(default=False)
     password = models.CharField(max_length=64)
     otp = models.IntegerField(default = 0)
+    token = models.CharField(max_length=100, default=None)
     objects = models.DjongoManager()

@@ -3,8 +3,7 @@ from .emails import *
 from .models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
-
-is_send = False
+import uuid
 
 def registerAPI(request):
     try:
@@ -83,7 +82,51 @@ def loginAPI(request):
         return render(request, 'login.html')
     except Exception as e:
         print(e)
+
+def changpasswordAPI(request,token):
+    context = {}
+    try:
+        if request.method == 'POST':
+            print(1)
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            user = User.objects.filter(token=token).first()
+            email = request.POST.get('email')
+            print(user)
+                
+            if password != confirm_password:
+                msg = 'Both Passwords must be matched.'
+                messages.add_message(request, messages.INFO, msg)
+                return redirect(f'confirm_password/{token}')
+            
+            user.password = make_password(password)
+            user.save()     
+            return redirect('login')  
+        context = {'user_id': user.email}        
+        return redirect(f'confirm_password/{token}',context)               
         
+    except Exception as e:
+        print(e)
+    return render(request, 'confirmpassword.html')    
+def forgetpasswordAPI(request):
+    try: 
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                msg = 'Invalid Email or Password'
+                messages.add_message(request, messages.INFO, msg)                
+                return render(request, 'forgetpassword.html')
+            token = str(uuid.uuid4())
+            user.token = token
+            user.save()
+            Forget_password(email,token)
+            msg = f'Email is sent successfully to {email}'
+            messages.add_message(request, messages.INFO, msg)
+            return render(request, 'forgetpassword.html')
+        return render(request, 'forgetpassword.html')              
+    except Exception as e:
+        print(e)       
 # class registerAPI(APIView):
 #     def post(self, request):
 #         try:
