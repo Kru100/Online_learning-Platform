@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Educator',
     'authenticating',
-    'rest_framework',
-    'rest_framework_simplejwt'
+    'instructor'
 ]
 
 MIDDLEWARE = [
