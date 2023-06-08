@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 from django.conf import settings
-from .models  import *
+from instructor.models  import *
 import random
 
 def OTP_email(email):
