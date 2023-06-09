@@ -1,0 +1,138 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hiten online learning platform </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+  <body>
+
+
+   <div class="container-fluid">
+
+   
+
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0 ms-auto ">
+              <li class="nav-item me-4 fs-5">
+                <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+              </li>
+              <li class="nav-item me-4 fs-5">
+                <a class="nav-link" href="#"> Course </a>
+              </li>
+              
+              <!-- <li class="nav-item me-4 fs-5">
+                <a class="nav-link">  <img src="/hiten-skola/user-solid.svg" alt="..." class="text-dark"> </a>
+                
+              </li> -->
+
+              
+              <li class="nav-item me-4 fs-5 mt-2 mb-md-0 mt-md-1">
+                <button type="button" class="btn btn-primary mb-3" onclick="location.href='{% url 'login' %}'"> Login </button>
+              </li>
+              <li class="nav-item me-4 fs-5 mt-md-1">
+                <button type="button" class="btn btn-danger" onclick="location.href='{% url 'signup' %}'">Sign Up</button>
+              </li>
+              
+            </ul>
+           
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="container shadow-lg mt-4 p-4">
+
+        <div class="row">
+          <div class="col-12 col-md-6 text-left p-5">
+  <h1 class="display-2 fw-lighter write"> Learn Courses</h1>
+  <span class="display-2 fw-bolder write"> Online </span>
+  <p class="text-capitalize mt-3 text-silver">Technology is bringing a massive wave of evolution on learning things in different ways.</p>
+
+  <button type="button" class="btn btn-sienna text-white shadow btn-lg text-uppercase ps-5 pe-5 mt-3">gets started </button>
+          </div>
+          <div class="col-12 col-md-6">
+   <img src="{% static 'images/photo-2.jpg' %}" class="img-fluid shadow-lg" style="width: 500px;">
+          </div>
+  
+        </div>
+  
+      </div>
+  
+
+
+     <div class="container">
+      <div class="row mt-5">
+        <div class="col-12">
+         <h1 class="text-capitalize"> featured courses </h1>
+        </div>
+     </div>
+
+
+     <div class="row mb-5">
+
+    
+      <div class="col-12 col-lg-4 mt-4">
+        <div class="card rounded" style="width: 18rem;">
+          <img src="{% static 'images/product-7.jpg' %}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title text-capitalize"> python</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="https://getbootstrap.com/docs/5.3/components/card/#about" target="_blank" class="btn btn-primary stretched-link">Go somewhere</a>
+          </div>
+        </div>
+       </div>
+
+
+     <div class="col-12 mt-4  col-lg-4">
+      <div class="card rounded" style="width: 18rem;">
+        <img src="{% static 'images/product-7.jpg' %}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-capitalize">html / css</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="https://getbootstrap.com/docs/5.3/components/card/#about" target="_blank" class="btn btn-primary stretched-link">Go somewhere</a>
+        </div>
+      </div>
+     </div>
+
+
+
+     <div class="col-12 col-lg-4 mt-4">
+      <div class="card rounded" style="width: 18rem;">
+        <img src="{% static 'images/product-7.jpg' %}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-capitalize"> Software development</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="https://getbootstrap.com/docs/5.3/components/card/#about" target="_blank" class="btn btn-primary stretched-link">Go somewhere</a>
+        </div>
+      </div>
+     </div>
+     </div>
+     </div>
+
+
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    
+
+  </body>
+</html>

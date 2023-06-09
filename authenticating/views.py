@@ -5,6 +5,11 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 import uuid
 
+
+def index(request):
+    return render(request,'homepage.html')
+
+
 def registerAPI(request):
     try:
         if request.method == 'POST':
@@ -126,3 +131,4 @@ def forgetpasswordAPI(request):
         return render(request, 'forgetpassword.html')              
     except Exception as e:
         print(e)       
+
