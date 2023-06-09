@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+
+body{
+    background-color: rgba(255, 255, 255, 0.941);
+    font-family: 'Jost', sans-serif;
+}
+
+.write{
+    color: #2f2d51;
+}
+
+.btn-sienna {
+    color: #161c2d;
+    background-color: #e7643e;
+    border-color: #e7643e;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(22, 28, 45, .075)
+}
+
+.btn-sienna:hover {
+    color: #161c2d;
+    background-color: #eb7b5b;
+    border-color: #e97451
+}
+
+.text-silver{
+    color: #77838f;
+}
+
+.btn-block {
+    width: 100%
+}
+
+.btn-primary2{
+    color: #fff;
+    background-color: #090761;
+    border-color: #090761;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(22, 28, 45, .075)  ;
+    height: 50px;
+}
+
+.btn-primary2:hover{
+    color: #fff;
+    background-color: #080652;
+    border-color: #07064e;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(22, 28, 45, .075);
+ }
