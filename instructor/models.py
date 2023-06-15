@@ -24,3 +24,16 @@ class Course(models.Model):
         default=None,
     )
     objects = models.DjongoManager()
+
+class students(models.Model):
+    email = models.EmailField()
+    marks = models.IntegerField(default=0)
+        
+class Quizz(models.Model):
+    name = models.CharField(max_length=100)
+    course = models.CharField(max_length=100)
+    mark = models.ArrayReferenceField(
+        to=students,
+        on_delete=models.CASCADE,
+        default = None,
+    )   
