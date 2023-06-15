@@ -1,0 +1,8 @@
+{% block content %}
+    <h2>Enrolled Users in {{ course.name }}</h2>
+    <ul>
+        {% for user in enrolled_users %}
+            <li>{{ user.email }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
