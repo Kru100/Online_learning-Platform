@@ -20,3 +20,39 @@ def add_course(request):
         return render(request, 'addcourse.html')
     except Exception as e:
         print(e)
+        
+def enrolledCourse(request):
+    try:
+        if request.method == 'POST':
+            coursename = request.POST.get('coursename')
+            enrolled = request.POST.get('enrolled')
+            course = Course.objects.filter(name=coursename).first()
+            user = User.objects.filter(email=enrolled).first()
+            print(course)
+            print(user)
+            course.enrolled.add(user)
+            course.save()
+            print(course.enrolled)
+            msg = "Enrolled successfully."
+            messages.add_message(request, messages.INFO, msg)
+            return render(request, 'enrolled.html')
+        return render(request, 'enrolled.html')            
+        
+    except Exception as e:
+        print(e)
+        
+def showenrolled(request):
+    course = Course.objects.get(name='Krunal')
+    enrolled_users = course.enrolled.all()
+    context = {
+        'course': course,
+        'enrolled_users': enrolled_users
+    }
+    return render(request, 'enrolled_users.html', context)
+
+def Quizz(request):
+    try:
+        if request.method == 'POST':
+            pass
+    except Exception as e:
+        print(e)
