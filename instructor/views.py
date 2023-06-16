@@ -49,10 +49,12 @@ def showenrolled(request):
         'enrolled_users': enrolled_users
     }
     return render(request, 'enrolled_users.html', context)
-
-def Quizz(request):
+        
+def courselist(request):
     try:
-        if request.method == 'POST':
-            pass
+        email = request.session.get('email')
+        course = Course.objects.filter(instructor=email).all()
+        print(course)
+        return render(request, 'courselist.html', {'course': course})
     except Exception as e:
         print(e)

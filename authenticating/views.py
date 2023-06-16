@@ -4,12 +4,13 @@ from instructor.models import *
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 import uuid
+from global_login_required import login_not_required
 
-
+@login_not_required
 def index(request):
     return render(request,'homepage.html')
 
-
+@login_not_required
 def registerAPI(request):
     try:
         if request.method == 'POST':
@@ -46,7 +47,8 @@ def registerAPI(request):
             
     except Exception as e:
         print(e)
-        
+
+@login_not_required        
 def otp(request):
     try:
         if request.method == 'POST':
@@ -63,7 +65,8 @@ def otp(request):
         return render(request, 'otp.html')
     except Exception as e:
         print(e)
-        
+
+@login_not_required        
 def loginAPI(request):
     try:
         if request.method == 'POST':
@@ -83,11 +86,13 @@ def loginAPI(request):
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'login.html')
             
-            return redirect('/')    
+            request.session['email'] = email
+            return redirect('/display2/')    
         return render(request, 'login.html')
     except Exception as e:
         print(e)
 
+@login_not_required
 def changpasswordAPI(request,token):
     context = {}
     try:
@@ -111,7 +116,9 @@ def changpasswordAPI(request,token):
         
     except Exception as e:
         print(e)
-    return render(request, 'confirmpassword.html')    
+    return render(request, 'confirmpassword.html') 
+
+@login_not_required   
 def forgetpasswordAPI(request):
     try: 
         if request.method == 'POST':

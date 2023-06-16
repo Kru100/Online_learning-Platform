@@ -86,14 +86,6 @@ DATABASES = {
             'username': '202001445',
             'password': 'Krunal!100',
         }
-    },
-    'second': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Educator',
-        'USER' : 'postgres',
-        'PASSWORD' : 'Krunal',
-        'HOST' : 'localhost',
-        'PORT' : '5432',
     }
 }
 
