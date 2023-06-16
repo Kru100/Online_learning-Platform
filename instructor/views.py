@@ -56,3 +56,12 @@ def Quizz(request):
             pass
     except Exception as e:
         print(e)
+
+
+def ins_list(request):
+    try:
+        inst_list = User.objects.filter(is_instructor=True)
+        
+        return render(request, 'instructor_list.html', {'instructor_list': inst_list})
+    except Exception as e:
+        print(e)
