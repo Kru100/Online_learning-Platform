@@ -1,18 +1,21 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-
+from django.urls import reverse
 def add_course(request):
     try:
         if request.method == 'POST':
             name = request.POST.get('name')
             instructor = request.POST.get('instructor')
+            description = request.POST.get('description')
+            time_needed = request.POST.get('time_needed')
+            created_at = request.POST.get('created_at')
             user = User.objects.filter(email=instructor).first()
             if user.is_instructor == False:
                 msg = "Your have no rights to add course."
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'addcourse.html')
-            course = Course(name=name, instructor=instructor)
+            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at)
             course.save()
             msg = "Course added successfully."
             messages.add_message(request, messages.INFO, msg)
@@ -54,7 +57,61 @@ def courselist(request):
     try:
         email = request.session.get('email')
         course = Course.objects.filter(instructor=email).all()
-        print(course)
         return render(request, 'courselist.html', {'course': course})
+    except Exception as e:
+        print(e)
+      
+def createQuiz(request, course_id):
+    try:
+        if request.method == 'POST':
+            quizname = request.POST.get('quizname')
+            total_marks = request.POST.get('total_marks')
+            time = request.POST.get('time')
+            quiz = Quiz_details.objects.filter(course_id=course_id).all()
+            print(1)
+            for q in quiz:
+                print(2)
+                if q.quiz_name == quizname:
+                    print(3)
+                    messages.add_message(request, messages.INFO, "Quiz already exists.")
+                    return redirect(reverse('course', kwargs={'course_id': course_id}))
+            print(4)
+            quiz = Quiz_details(course_id=course_id,quiz_name=quizname,total_marks=total_marks,time=time)
+            print(5)
+            quiz.save()
+            messages.add_message(request, messages.INFO, "Quiz Added")
+            return redirect(reverse('course', kwargs={'course_id': course_id}))
+        quiz = Quiz_details.objects.filter(course_id=course_id).all()
+        context = {
+                'quiz' : quiz,
+            }
+        return render(request,'coursehome.html',context)
+    except Exception as e:
+        print(e)
+        
+def quizdisplay(request, course_id, quiz_id):
+    try:
+        if request.method == 'POST':       
+            question = request.POST.get('question')
+            opt1 = request.POST.get('opt1')
+            opt2 = request.POST.get('opt2')
+            opt3 = request.POST.get('opt3')
+            opt4 = request.POST.get('opt4')
+            answer = request.POST.get('answer')
+            
+            quiz = Quiz(course_id = course_id,quiz_id = quiz_id,question=question, opt1=opt1, opt2=opt2, opt3=opt3, opt4=opt4, answer=answer)
+            quiz.save()
+            return redirect(reverse('quiz', kwargs={'course_id': course_id, 'quiz_id': quiz_id}))
+            #redirect(reverse('course', kwargs={'course_id': course_id}))
+        course = Course.objects.filter(id=course_id)
+        quiz1 = Quiz_details.objects.filter(id=quiz_id)
+        quizz = Quiz.objects.filter(quiz_id=quiz_id).all()
+        print(quizz)
+        context = {
+            'quiz' : quizz,
+            'course' : course,
+            'quiz1' : quiz1,
+        }
+        return render(request, 'quizz.html',context)    
     except Exception as e:
         print(e)
