@@ -25,15 +25,15 @@ class Course(models.Model):
     )
     objects = models.DjongoManager()
 
-class students(models.Model):
-    email = models.EmailField()
-    marks = models.IntegerField(default=0)
+class Quiz(models.Model):
+    course_id = models.IntegerField()
+    quiz_id = models.IntegerField()
+    question = models.CharField(max_length=500)
+    opt1 = models.CharField(max_length=250)
+    opt2 = models.CharField(max_length=250)
+    opt3 = models.CharField(max_length=250)
+    opt4 = models.CharField(max_length=250)
+    answer = models.IntegerField()
         
-class Quizz(models.Model):
-    name = models.CharField(max_length=100)
-    course = models.CharField(max_length=100)
-    mark = models.ArrayReferenceField(
-        to=students,
-        on_delete=models.CASCADE,
-        default = None,
-    )   
+
+    
