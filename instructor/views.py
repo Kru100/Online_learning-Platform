@@ -7,12 +7,15 @@ def add_course(request):
         if request.method == 'POST':
             name = request.POST.get('name')
             instructor = request.POST.get('instructor')
+            description = request.POST.get('description')
+            time_needed = request.POST.get('time_needed')
+            created_at = request.POST.get('created_at')
             user = User.objects.filter(email=instructor).first()
             if user.is_instructor == False:
                 msg = "Your have no rights to add course."
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'addcourse.html')
-            course = Course(name=name, instructor=instructor)
+            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at)
             course.save()
             msg = "Course added successfully."
             messages.add_message(request, messages.INFO, msg)
