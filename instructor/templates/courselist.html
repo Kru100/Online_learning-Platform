@@ -1,7 +1,7 @@
 {% block content %}
     <ul>
         {% for c in course %}
-        <h2>{{ c.name }}</h2>
+        <li><a href="{% url 'course' c.id %}">{{c.name}}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
