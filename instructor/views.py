@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-
+from django.urls import reverse
 def add_course(request):
     try:
         if request.method == 'POST':
@@ -57,21 +57,7 @@ def courselist(request):
         return render(request, 'courselist.html', {'course': course})
     except Exception as e:
         print(e)
-        
-# def coursecontent(request, id):
-#     try:
-#         quiz = Quiz.objects.filter(course_id=id).values('quiz_name').distinct()
-#         print(quiz)
-#         sett = set()
-#         for q in quiz:
-#             sett.add(q.quiz_id)
-#         context = {
-#             'quiz': sett,
-#         }
-#         return render(request, 'coursehome.html', context)
-#     except Exception as e:
-#         print(e)
-from django.urls import reverse      
+      
 def createQuiz(request, course_id):
     try:
         if request.method == 'POST':
