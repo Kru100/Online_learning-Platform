@@ -9,5 +9,6 @@ urlpatterns = [
     path('display/',views.showenrolled, name='display'),
     path('display2/',views.courselist, name='display2'),
     path('course/<int:course_id>/',views.createQuiz, name='course'),
-    path('quiz/<int:course_id>/<int:quiz_id>/', views.quizdisplay, name='quiz')
+    path('quiz/<int:course_id>/<int:quiz_id>/', views.quizdisplay, name='quiz'),
+    path('quizshow/<int:quiz_id>/', views.quiz_show, name='quiz_show'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
