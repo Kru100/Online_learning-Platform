@@ -36,14 +36,22 @@
                 <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="">My
                         Courses</a>
                 </li>
-                <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="{% url 'quizlist' id %}">
-                        all Quizzes </a></li>
-                        
-                <li class="breadcrumb-item active animate__animated animate__backInRight" aria-current="page">Quizzes
+                <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="{% url 'course' id %}">
+                    Quizzes </a>
+              </li>                
+                <li class="breadcrumb-item active animate__animated animate__backInRight" aria-current="page"> {{ quiz1.quiz_name }}
                 </li>
             </ol>
         </nav>
     </div>
+
+    
+    <div class="container rounded border">
+        <div class="py-1 m-2 rounded d-flex justify-content-center">
+           <h5 class="fw-bold text-center"> Quizzes -  {{ course.name }}  </h5>
+        </div>
+     </div>
+
 
     <div class="container shadow mb-5 p-3" style="max-width: 768px;">
 
@@ -121,8 +129,47 @@
         </form>
 
     </div>
+    
 
+    {% if quiz %}
+  {% for q in quiz %}
+   <div class="container d-flex justify-content-center shadow mt-3 mb-5" style="width: 900px;">
 
+  
+    <div class="row">
+        
+         <div class="col mb-3 fw-bold">
+  
+          {{ forloop.counter }}.  {{ q.question }}
+           
+         </div>
+
+         <div class="col-12">
+            <p class="mb-2"> {{ q.opt1 }}  </p>
+           </div>
+           <div class="col-12">
+            <p class="mb-2">  {{ q.opt2 }} </p>
+           </div>
+           <div class="col-12">
+            <p class="mb-2">  {{ q.opt3 }} </p>
+           </div>
+           <div class="col-12">
+            <p class="mb-2">  {{ q.opt4 }} </p>
+           </div>
+           
+
+    </div> 
+    
+    </div>
+
+    {% endfor %}
+   {% else %}
+
+   <p class="fw-bold"> No Question added  </p>
+
+   {% endif %}
+   
+ 
 </body>
 
 </html>

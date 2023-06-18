@@ -106,8 +106,8 @@ def quizdisplay(request, course_id, quiz_id):
             quiz.save()
             return redirect(reverse('quiz', kwargs={'course_id': course_id, 'quiz_id': quiz_id}))
             #redirect(reverse('course', kwargs={'course_id': course_id}))
-        course = Course.objects.filter(id=course_id)
-        quiz1 = Quiz_details.objects.filter(id=quiz_id)
+        course = Course.objects.get(id=course_id)
+        quiz1 = Quiz_details.objects.get(id=quiz_id)
         quizz = Quiz.objects.filter(quiz_id=quiz_id).all()
         print(quizz)
         context = {
@@ -118,22 +118,6 @@ def quizdisplay(request, course_id, quiz_id):
         }
         return render(request, 'quizz.html',context)    
     except Exception as e:
-        print(e)
-
-def quizlist(request, course_id):
-   try:
-        course_name = Course.objects.get(id=course_id)
-        quiz_list = Quiz_details.objects.filter(course_id=course_id).all()
-        
-       
-        context = {
-            'id' : course_id,
-            'course' : course_name,
-            'quiz_list' : quiz_list,
-        }
-   
-        return render(request,'allquiz.html',context)
-   except Exception as e:
         print(e)
 
 def quiz_show(request,quiz_id):

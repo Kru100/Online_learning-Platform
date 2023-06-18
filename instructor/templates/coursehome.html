@@ -31,8 +31,6 @@
          <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="">My
             Course</a>
          </li>
-         <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)"
-            href="{% url 'quizlist' course.id %}"> all quiz </a></li>
          <li class="breadcrumb-item active animate__animated animate__backInRight" aria-current="page"> Create quiz </li>
       </ol>
    </nav>
@@ -66,5 +64,70 @@
            </form>
         </div>
         </div>
+
+        <div class="container">
+
+         {% if quiz %}
+ 
+         <div class="table-responsive">
+ 
+             <table class="table my-3 text-center" style="white-space: nowrap;">
+                <thead class="table-dark">
+                   <tr>
+                      <th> SL</th>
+                      <th> Quiz Title </th>
+                      <th> Total Marks </th>
+                      <th> Minutes </th>
+                      <th> Add Question </th>
+                      <th> Question </th>
+                     
+                   </tr>
+                </thead>
+ 
+                <tbody class="table-group-divider">
+ 
+                 {% for quiz1 in quiz %}
+                  <tr>
+                     <td class="fw-bold">
+                         {{ forloop.counter }}
+                     </td>
+ 
+                     <td>
+                        {{ quiz1.quiz_name }}
+                     </td>
+ 
+                     <td>
+                         {{ quiz1.total_marks }}
+                     </td>
+                     <td>
+                         {{ quiz1.time }}
+                     </td>
+ 
+                     
+ 
+                     <td>
+                       <a href="{% url 'quiz' quiz1.course_id quiz1.id %}">  <button class="btn btn-danger"> add </button> </a> 
+                     </td>
+ 
+                     <td>
+                      <a href="{% url 'quiz_show' quiz1.id %}">  <button class="btn btn-info"> See </button> </a>  
+                    </td>
+                
+                 
+                  </tr>
+ 
+                  {% endfor %}
+                </tbody>
+             </table>
+          </div>
+     {% else %}
+      
+     <div >
+         <p class="text-center fw-bold pb-3">No quizzes found</p>
+      </div>
+ 
+     {% endif %}
+ 
+     </div>
 </body>
 </html>
