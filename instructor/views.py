@@ -81,9 +81,12 @@ def createQuiz(request, course_id):
             quiz.save()
             messages.add_message(request, messages.INFO, "Quiz Added")
             return redirect(reverse('course', kwargs={'course_id': course_id}))
+        
+        course = Course.objects.get(id=course_id)
         quiz = Quiz_details.objects.filter(course_id=course_id).all()
         context = {
                 'quiz' : quiz,
+                'course' : course,
             }
         return render(request,'coursehome.html',context)
     except Exception as e:
@@ -108,6 +111,7 @@ def quizdisplay(request, course_id, quiz_id):
         quizz = Quiz.objects.filter(quiz_id=quiz_id).all()
         print(quizz)
         context = {
+            'id' : course_id,
             'quiz' : quizz,
             'course' : course,
             'quiz1' : quiz1,
@@ -115,3 +119,31 @@ def quizdisplay(request, course_id, quiz_id):
         return render(request, 'quizz.html',context)    
     except Exception as e:
         print(e)
+
+def quizlist(request, course_id):
+   try:
+        course_name = Course.objects.get(id=course_id)
+        quiz_list = Quiz_details.objects.filter(course_id=course_id).all()
+        
+       
+        context = {
+            'id' : course_id,
+            'course' : course_name,
+            'quiz_list' : quiz_list,
+        }
+   
+        return render(request,'allquiz.html',context)
+   except Exception as e:
+        print(e)
+
+def quiz_show(request,quiz_id):
+      
+        quizz = Quiz.objects.filter(quiz_id=quiz_id).all()
+  
+        context = {
+            
+            'quiz' : quizz,
+           
+        }
+        return render(request, 'quiz_show.html',context)    
+       
