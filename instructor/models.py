@@ -27,6 +27,7 @@ class Course(models.Model):
         default=None,
     )
     objects = models.DjongoManager()
+    
 class Quiz_details(models.Model):
     course_id = models.IntegerField()
     quiz_name = models.CharField(max_length=100)
@@ -44,6 +45,12 @@ class Quiz(models.Model):
     opt4 = models.CharField(max_length=250)
     answer = models.IntegerField()
     objects = models.DjongoManager()
-        
+
+class Video(models.Model):
+    course_id = models.IntegerField()
+    video_title = models.CharField(max_length=100)
+    video_description = models.CharField(max_length=500)
+    file = models.FileField(upload_to='videos/%y')  
+    objects = models.DjongoManager()      
 
     

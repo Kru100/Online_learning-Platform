@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -54,44 +55,40 @@
             <a> <div class="addjob"> <i class="fa-solid fa-plus"></i> New Job</div> </a> -->
             
              <div class="userimage">
-               <h2 class="mb-4"> Add Course : </h2>
+               <h2 class="mb-4"> Add Course </h2>
               
              </div>
-             <form action="">
-       
+
+             <form method="POST">
+               {% csrf_token %} 
                <table class="table table-hover">
                  <tr>
                    <td>  Course Name  </td>
                    <td>:</td>
-                   <td> <input type="text" required> </td>
+                   <td> <input type="text" name="name" required> </td>
                  </tr>
                  <tr>
                    <td> Description </td>
                    <td>:</td>
-                   <td> <textarea name="" style="width: 450px; height: 150px;"></textarea> </td>
+                   <td> <textarea name="description" style="width: 450px; height: 150px;"></textarea> </td>
                  </tr>
                  
                  <tr>
                   <td> 
-                    Choose Category
+                    Time Needed to Complete 
                   </td>
                   <td> : </td>
                   <td >
-                    <select>
-                      <option value="IT development"> IT development </option>
-                      <option value="Personal Development"> Personal Development </option>
-                      <option value="Machine Learning"> Machine Learning </option>
-                   </select>
+                    <input type="text" name="time_needed" required>
                   </td>
                  
                  </tr>
-               
                
                
                </table>
        
                <!-- <button class="submit" type="button">Save changes</button> -->
-               <button type="submit" class="btn btn-primary submit">Add course</button>
+               <button type="submit" class="btn btn-primary submit" value="insert">Add course</button>
              </form>
        
           
