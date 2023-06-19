@@ -2,25 +2,26 @@ from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
 from django.urls import reverse
+from datetime import date
 def add_course(request):
     try:
         if request.method == 'POST':
             name = request.POST.get('name')
-            instructor = request.POST.get('instructor')
+            instructor = request.session.get('email')
             description = request.POST.get('description')
             time_needed = request.POST.get('time_needed')
-            created_at = request.POST.get('created_at')
+            created_at = date.today()
             user = User.objects.filter(email=instructor).first()
             if user.is_instructor == False:
                 msg = "Your have no rights to add course."
                 messages.add_message(request, messages.INFO, msg)
-                return render(request, 'addcourse.html')
+                return render(request, 'courseadd.html')
             course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at)
             course.save()
             msg = "Course added successfully."
             messages.add_message(request, messages.INFO, msg)
-            return render(request, 'addcourse.html')
-        return render(request, 'addcourse.html')
+            return render(request, 'courseadd.html')
+        return render(request, 'courseadd.html')
     except Exception as e:
         print(e)
         
@@ -106,8 +107,8 @@ def quizdisplay(request, course_id, quiz_id):
             quiz.save()
             return redirect(reverse('quiz', kwargs={'course_id': course_id, 'quiz_id': quiz_id}))
             #redirect(reverse('course', kwargs={'course_id': course_id}))
-        course = Course.objects.filter(id=course_id)
-        quiz1 = Quiz_details.objects.filter(id=quiz_id)
+        course = Course.objects.get(id=course_id)
+        quiz1 = Quiz_details.objects.get(id=quiz_id)
         quizz = Quiz.objects.filter(quiz_id=quiz_id).all()
         print(quizz)
         context = {
@@ -131,3 +132,14 @@ def quiz_show(request,quiz_id):
         }
         return render(request, 'quiz_show.html',context)    
        
+def video_upload(request, course_id):
+    if request.method == 'POST':
+        video_title = request.POST.get('video_title')
+        video_description = request.POST.get('video_description')
+        file = request.FILES.get('file')
+        vid = Video(course_id=course_id, video_title=video_title,video_description=video_description, file=file)
+        vid.save()
+        messages.add_message(request, messages.INFO, "Video saved successfully.")
+        return redirect(reverse('video_upload', kwargs={'course_id': course_id,}))
+    vid = Video.objects.filter(course_id=course_id)
+    return render(request, 'upload.html', {'vid':vid,})
