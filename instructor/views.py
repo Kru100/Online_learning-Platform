@@ -143,3 +143,55 @@ def video_upload(request, course_id):
         return redirect(reverse('video_upload', kwargs={'course_id': course_id,}))
     vid = Video.objects.filter(course_id=course_id)
     return render(request, 'upload.html', {'vid':vid,})
+
+
+def edit_question(request,course_id,quiz_id,id):
+
+     quizz = Quiz.objects.get(id=id)
+
+     context = {
+         'quizz' : quizz
+     }
+
+     return render(request,'update.html',context)
+
+def update_question(request,course_id,quiz_id,id):
+    
+
+         if request.method == 'POST' :
+            questions = request.POST.get('question')
+            opt1s = request.POST.get('opt1')
+            opt2s = request.POST.get('opt2')
+            opt3s = request.POST.get('opt3')
+            opt4s = request.POST.get('opt4')
+            answer = request.POST.get('answer')
+
+            quizz = Quiz.objects.get(id=id)
+
+            quizz.question = questions
+            quizz.opt1 = opt1s
+            quizz.opt2 = opt2s
+            quizz.opt3 = opt3s
+            quizz.opt4 = opt4s
+            quizz.answer = answer
+
+            quizz.save()
+            messages.add_message(request, messages.INFO, "Question update successfully !!")
+         return redirect(reverse('quiz_show',kwargs={'quiz_id': quiz_id}))
+
+def delete_question(request,course_id,quiz_id,id):
+
+     quizz = Quiz.objects.get(id=id)
+
+     quizz.delete()
+     
+     messages.add_message(request, messages.INFO, "Question delete successfully !!")
+     return redirect(reverse('quiz_show',kwargs={'quiz_id': quiz_id}))
+    
+            
+            
+            
+
+            
+   
+

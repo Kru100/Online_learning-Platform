@@ -36,10 +36,10 @@
                 <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="">My
                         Courses</a>
                 </li>
-                <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="{% url 'course' id %}">
+                <li class="breadcrumb-item fw-bold"><a class="breadcrumb-link" style="color: rgb(10, 10, 48)" href="{% url 'course' quizz.course_id %}">
                     Quizzes </a>
               </li>                
-                <li class="breadcrumb-item active animate__animated animate__backInRight" aria-current="page"> {{ quiz1.quiz_name }}
+                <li class="breadcrumb-item active animate__animated animate__backInRight" aria-current="page"> update 
                 </li>
             </ol>
         </nav>
@@ -48,7 +48,7 @@
     
     <div class="container rounded border">
         <div class="py-1 m-2 rounded d-flex justify-content-center">
-           <h5 class="fw-bold text-center"> Quizzes -  {{ course.name }}  </h5>
+           <h5 class="fw-bold text-center"> Update question  </h5>
         </div>
      </div>
 
@@ -56,14 +56,14 @@
     <div class="container shadow mb-5 p-3" style="max-width: 768px;">
 
 
-        <form method="POST">
+        <form method="POST" action="/quiz/update2/{{quizz.course_id}}/{{quizz.quiz_id}}/{{quizz.id}}/">
 
             {% csrf_token %}
 
             <div class="mb-3 row mx-2">
                 <label for="question" class="form-label fw-bold"> Question:  </label>
              
-                    <input id="question" class=" form-control" type="text" name="question" required>
+                    <input id="question" class=" form-control" value="{{ quizz.question }}" type="text" name="question" required>
                 
                 
             </div>
@@ -73,7 +73,7 @@
 
                 <div class="col-md-10">
                 
-                    <input type="text" class="form-control" name="opt1" required>
+                    <input type="text" class="form-control" value="{{ quizz.opt1 }}" name="opt1" required>
 
                 </div>
                 
@@ -85,7 +85,7 @@
                 <label class=" col-md-2 col-form-label  fw-bold"> Option 2</label>
 
                 <div class="col-md-10">
-                    <input type="text" class="form-control" name="opt2" required>
+                    <input type="text" class="form-control" value="{{ quizz.opt2 }}" name="opt2" required>
                 </div>
                 
 
@@ -95,7 +95,7 @@
                 <label class=" col-md-2 col-form-label  fw-bold"> Option 3</label>
 
                 <div class="col-md-10">
-                    <input type="text" class="form-control" name="opt3" required>
+                    <input type="text" class="form-control" value="{{ quizz.opt3 }}" name="opt3" required>
                 </div>
                 
 
@@ -105,23 +105,22 @@
                 <label class=" col-md-2 col-form-label  fw-bold"> Option 4</label>
 
                 <div class="col-md-10">
-                    <input type="text" class="form-control" name="opt4" required>
+                    <input type="text" class="form-control" value="{{ quizz.opt4 }}" name="opt4" required>
                 </div>
                 
 
             </div>
 
-                <select class="form-select mb-3" name="answer" id="answers" required>
-                    <option value=""> Select answer </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
+            <select class="form-select mb-3" name="answer" id="answers" required>
+                <option value="1" {% if quizz.answer == 1 %}selected{% endif %}>1</option>
+                <option value="2" {% if quizz.answer == 2 %}selected{% endif %}>2</option>
+                <option value="3" {% if quizz.answer == 3 %}selected{% endif %}>3</option>
+                <option value="4" {% if quizz.answer == 4 %}selected{% endif %}>4</option>
+            </select>
            
                 <div class="d-flex justify-content-center">
 
-                    <button type="submit" class="btn btn-primary mb-3"> Add </button> 
+                    <button type="submit" class="btn btn-primary mb-3"> Update  </button> 
 
                 </div>
 
@@ -130,53 +129,6 @@
 
     </div>
     
-
-    {% if quiz %}
-  {% for q in quiz %}
-   <div class="container d-flex justify-content-center shadow mt-3 mb-5" style="width: 900px;">
-
-  
-    <div class="row">
-        
-         <div class="col mb-3 fw-bold">
-  
-          {{ forloop.counter }}.  {{ q.question }}
-           
-         </div>
-
-         <div class="col-12">
-            <p class="mb-2"> {{ q.opt1 }}  </p>
-           </div>
-           <div class="col-12">
-            <p class="mb-2">  {{ q.opt2 }} </p>
-           </div>
-           <div class="col-12">
-            <p class="mb-2">  {{ q.opt3 }} </p>
-           </div>
-           <div class="col-12">
-            <p class="mb-2">  {{ q.opt4 }} </p>
-           </div>
-           
-           <div class="col-12 mb-3">
-
-            <a href="{% url 'edit_question' q.course_id q.quiz_id q.id %}"> <button class="btn btn-primary"> Update  </button></a>
-
-            <a href="{% url 'delete_question' q.course_id q.quiz_id q.id %}"> <button class="btn btn-danger"> Delete </button></a>
-
-           </div>
-           
-
-    </div> 
-    
-    </div>
-
-    {% endfor %}
-   {% else %}
-
-   <p class="fw-bold"> No Question added  </p>
-
-   {% endif %}
-   
  
 </body>
 
