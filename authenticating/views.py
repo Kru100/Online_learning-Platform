@@ -19,9 +19,7 @@ def registerAPI(request):
             age = request.POST.get('age')
             qualification = request.POST.get('qualification')
             password = request.POST.get('password')
-            print(password + 'Krunal')
             hashed_password = make_password(password)
-            print(hashed_password)
             role = request.POST.get('role')
             if role == 'student':
                 is_student = True
@@ -29,7 +27,6 @@ def registerAPI(request):
             if role == 'instructor':
                 is_instructor = True
                 is_student = False   
-            
             user1 = User.objects.filter(email=email).first()
             if user1 is not None:
                 message = "Email already in used."
@@ -87,7 +84,12 @@ def loginAPI(request):
                 return render(request, 'login.html')
             
             request.session['email'] = email
-            return redirect('/display2/')    
+            if user.is_student is True:
+                return redirect('/indexpage/')
+            elif user.is_instructor is True:
+                return redirect('/home/')
+            else:
+                return redirect('/admin/')    
         return render(request, 'login.html')
     except Exception as e:
         print(e)
