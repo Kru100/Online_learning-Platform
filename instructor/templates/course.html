@@ -60,7 +60,7 @@
             <a href=#> <button class="btn btn-warning">Doubt Room</button></a>
           </div>
           <div class="p-3 text-center skill-block">
-            <a href=#> <button class="btn btn-dark">Edit</button></a> 
+            <a href={% url 'edit_course' course.id %}> <button class="btn btn-dark">Edit</button></a> 
           </div>
           <div class="p-3 text-center skill-block">
             <a href={% url 'delete_course' course.id %}> <button class="btn btn-danger">Delete</button></a> 

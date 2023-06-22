@@ -17,12 +17,13 @@ def add_course(request):
             description = request.POST.get('description')
             time_needed = request.POST.get('time_needed')
             created_at = date.today()
+            price = request.POST.get('price')
             user = User.objects.filter(email=instructor).first()
             if user.is_instructor == False:
                 msg = "Your have no rights to add course."
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'courseadd.html')
-            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at)
+            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at, price=price)
             course.save()
             msg = "Course added successfully."
             messages.add_message(request, messages.INFO, msg)
@@ -205,7 +206,29 @@ def delete_course(request, course_id):
         return redirect('/display2/')
     except Exception as e:
         print(e)            
-            
+
+def edit_course(request, course_id):
+    try:
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            instructor = request.session.get('email')
+            description = request.POST.get('description')
+            time_needed = request.POST.get('time_needed')
+            price = request.POST.get('price')
+            created_at = date.today()
+            user = User.objects.filter(email=instructor).first()
+            if user.is_instructor == False:
+                msg = "Your have no rights to add course."
+                messages.add_message(request, messages.INFO, msg)
+                return render(request, 'edit_course.html')
+            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at, price=price)
+            course.save()
+            msg = "Course added successfully."
+            messages.add_message(request, messages.INFO, msg)
+            return redirect(reverse('course',kwargs={'course_id': course_id}))
+        return render(request, 'edit_course.html')
+    except Exception as e:
+        print(e)
 
             
    
