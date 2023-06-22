@@ -16,7 +16,8 @@ urlpatterns = [
     path('quiz/update2/<int:course_id>/<int:quiz_id>/<int:id>/',views.update_question,name='update_question'),
     path('quiz/delete/<int:course_id>/<int:quiz_id>/<int:id>/',views.delete_question,name='delete_question'),
     path('course/<int:course_id>/',views.courseHome, name='course'),
-    path('course/delete/<int:course_id>', views.delete_course, name='delete_course')
+    path('course/delete/<int:course_id>', views.delete_course, name='delete_course'),
+    path('edit-course/<int:course_id>', views.edit_course, name='edit_course'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

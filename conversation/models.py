@@ -1,3 +1,8 @@
-from django.db import models
+from djongo import models
 
-# Create your models here.
+class Anouncement(models.Model):
+    sender = models.EmailField()
+    anouncement = models.TextField()
+    course = models.IntegerField()
+    time = models.DateTimeField(auto_now_add=True)
+    objects = models.DjongoManager()
