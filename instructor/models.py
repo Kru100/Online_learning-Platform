@@ -12,6 +12,7 @@ class User(models.Model):
     is_instructor = models.BooleanField(default=False)
     password = models.CharField(max_length=64)
     otp = models.IntegerField(default = 0)
+    course_enrolled = models.JSONField(default=None)
     token = models.CharField(max_length=100, default=None)
     objects = models.DjongoManager()
 
@@ -21,6 +22,7 @@ class Course(models.Model):
     description = models.CharField(max_length=250, default = None)
     time_needed = models.CharField(max_length=100, default=None)
     created_at = models.DateTimeField(default=None)
+    price = models.IntegerField(default=0)
     enrolled = models.ArrayReferenceField(
         to=User,
         on_delete=models.CASCADE,
@@ -31,7 +33,7 @@ class Course(models.Model):
 class Quiz_details(models.Model):
     course_id = models.IntegerField()
     quiz_name = models.CharField(max_length=100)
-    total_marks = models.IntegerField()
+    marks = models.JSONField(default=None)
     time = models.CharField(max_length=100)
     objects = models.DjongoManager()
     
