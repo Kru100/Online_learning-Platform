@@ -141,3 +141,22 @@ def forgetpasswordAPI(request):
     except Exception as e:
         print(e)       
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    del request.session['email']  
+    logout(request)
+    return redirect('login')
+
+def custom_login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        email = request.session.get('email')
+        if email:
+            # User is authenticated based on the email session value
+            return view_func(request, *args, **kwargs)
+        else:
+            # User is not authenticated, redirect to the login page
+            return redirect('login')
+    
+    return wrapper
