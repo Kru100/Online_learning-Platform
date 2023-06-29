@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from instructor.models import User
+from instructor.models import *
 from django.contrib.auth.decorators import login_required
-from authenticating.views import *
+from authent.views import *
 
 
 # Create your views here.
