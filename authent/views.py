@@ -1,26 +1,30 @@
 from django.shortcuts import render, redirect
-from .emails import *
 from instructor.models import *
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 import uuid
-
+from .emails import *
 
 
 def index(request):
     return render(request,'homepage.html')
 
-
-def registerAPI(request):
+def register(request):
     try:
         if request.method == 'POST':
-            name = request.POST.get('name')            
+            name = request.POST.get('name')     
+            print(name)       
             email = request.POST.get('email')         
+            print(email)
             age = request.POST.get('age')
+            print(age)
             qualification = request.POST.get('qualification')
+            print(qualification)
             password = request.POST.get('password')
+            print(password)
             hashed_password = make_password(password)
             role = request.POST.get('role')
+            print(role)
             if role == 'student':
                 is_student = True
                 is_instructor = False
@@ -28,13 +32,17 @@ def registerAPI(request):
                 is_instructor = True
                 is_student = False   
             user1 = User.objects.filter(email=email).first()
+            print(user1)
             if user1 is not None:
+                print(2)
                 message = "Email already in used."
                 messages.add_message(request, messages.INFO, message)
-                return render(request, 'signup.html')   
-            user =  User(name=name, email=email, age=age,qualification=qualification, password=hashed_password, is_student=is_student, is_instructor=is_instructor)
-        
+                return render(request, 'signup.html') 
+            print(3)  
+            user = User.objects.create(name=name, email=email, age=age,qualification=qualification, password=hashed_password, is_student=is_student, is_instructor=is_instructor)
+            print(4)
             user.save()
+            print(5)
             request.session['email'] = email
             OTP_email(email)
             
