@@ -1,5 +1,6 @@
 from djongo import models
-        
+#from authent.models import *
+
 class User(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -12,7 +13,6 @@ class User(models.Model):
     is_instructor = models.BooleanField(default=False)
     password = models.CharField(max_length=64)
     otp = models.IntegerField(default = 0)
-    course_enrolled = models.JSONField(default=None)
     token = models.CharField(max_length=100, default=None)
     objects = models.DjongoManager()
 
@@ -23,11 +23,6 @@ class Course(models.Model):
     time_needed = models.CharField(max_length=100, default=None)
     created_at = models.DateTimeField(default=None)
     price = models.IntegerField(default=0)
-    enrolled = models.ArrayReferenceField(
-        to=User,
-        on_delete=models.CASCADE,
-        default=None,
-    )
     objects = models.DjongoManager()
     
 class Quiz_details(models.Model):
