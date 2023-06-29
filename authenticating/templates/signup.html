@@ -40,7 +40,7 @@ input[type=number] {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0 ms-auto ">
               <li class="nav-item me-4 fs-5">
-                <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'home2' %}">Home</a>
               </li>
               <li class="nav-item me-4 fs-5">
                 <a class="nav-link" href="#"> Course </a>
@@ -53,7 +53,7 @@ input[type=number] {
                 <button type="button" class="btn btn-primary mb-3" onclick="location.href='{% url 'login' %}'"> Login </button>
               </li>
               <li class="nav-item me-4 fs-5 mt-md-1">
-                <button type="button" class="btn btn-danger" onclick="location.href='{% url 'signup' %}'">Sign Up</button>
+                <button type="button" class="btn btn-success" onclick="location.href='{% url 'signup' %}'">Sign Up</button>
               </li>
               
             </ul>
@@ -90,7 +90,7 @@ input[type=number] {
                         <div class="col-md-12 col-xl-12 mb-4">
                           <div class="form-group">
                             <label class="form-label"> User name </label>
-                            <input type="text" class="form-control" name="name" placeholder="hiten" autocomplete="__away" required>
+                            <input type="text" class="form-control" name="name" placeholder="your name" autocomplete="__away" required>
                           </div>
                       
                         </div>
@@ -99,7 +99,7 @@ input[type=number] {
                        <div class="col-md-12 col-xl-12">
                         <div class="form-group">
                           <label class="form-label"> Email  </label>
-                          <input type="text" class="form-control" name="email" placeholder="hitenmistry@354gmail.com" autocomplete="__away" required>
+                          <input type="text" class="form-control" name="email"  autocomplete="__away" required>
                       </div>
                      
                      </div>
@@ -110,14 +110,14 @@ input[type=number] {
                 <div class="col-sm-3 col-md-4 mb-4">
                   <div class="form-group">
                     <label> age </label>
-                    <input type="number" class="form-control" name="age" placeholder="21" autocomplete="__away" required>
+                    <input type="number" class="form-control" name="age"  autocomplete="__away" required>
                   </div>
               
                 </div>
                 <div class="col-sm-9 col-md-8">
                   <div class="form-group">
                     <label> Qualification  </label>
-                    <input type="text" name="qualification" class="form-control" placeholder="engineer" autocomplete="__away" required>
+                    <input type="text" name="qualification" class="form-control"  autocomplete="__away" required>
                   </div>
               
                 </div>
@@ -136,14 +136,14 @@ input[type=number] {
                     </div>
                     <div class="col-md-4">
                       <div class="form-check">
-                        <input type="radio" name="role" class="form-check-input" id="student" value="student" checked>
+                        <input type="radio" name="role" class="form-check-input" id="student" value="student"  required>
                         <label for="student" class="form-check-label"> Student</label>
                       </div>
     
                     </div>
                     <div class="col-md-4">
                       <div class="form-check">
-                        <input type="radio" name="role" class="form-check-input" id="teacher" value="instructor">
+                        <input type="radio" name="role" class="form-check-input" id="teacher" value="instructor" required>
                         <label for="teacher" class="form-check-label" > Instructor </label>
                       </div>
     
