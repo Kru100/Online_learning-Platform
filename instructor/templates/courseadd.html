@@ -25,20 +25,20 @@
 	  		<h1><a href="index.html" class="logo">Nav Bar </a></h1>
         <ul class="list-unstyled components mb-5">
           <li>
-            <a href="#"><span class="fa fa-home mr-3"></span> Homepage</a>
+            <a href="{% url 'home' %}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="#"><span class="fa-brands fa-youtube mr-3"> </span> Course</a>
+              <a href="{% url 'display2' %}"><span class="fa-brands fa-youtube mr-3"> </span> Course</a>
           </li>
 
           <li class="active">
-            <a href="#"><span class="fa-solid fa-plus mr-3"> </span> Add Course</a>
+            <a href=""><span class="fa-solid fa-plus mr-3"> </span> Add Course</a>
           </li>
           <li>
             <a href="#"><span class="fa-solid fa-chart-simple mr-3"></span> Performance </a>
           </li>
           <li>
-            <a href="#"><span class="fa-solid fa-right-from-bracket  mr-3"></span> Logout </a>
+            <a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket  mr-3"></span> Logout </a>
           </li>
           <li>
             <a href="#"><span class="fa fa-paper-plane mr-3"></span> Information</a>
