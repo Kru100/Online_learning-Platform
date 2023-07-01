@@ -10,11 +10,28 @@
 <body>
 
     {% block body %}
-
-    <h1> helllo wolrd </h1>
     
-   {% endblock %}
-  
+    
+<h1> search results : {{ query }} </h1>
+
+{% if results %}
+
+{% for res in results %}
+
+
+{{ res.name }}
+
+{{ res.instructor }}
+
+{% endfor %}
+
+{% else %}
+
+<h1> no results found !! please write spelling correctly. </h1>
+
+{% endif %}
+
+{% endblock %}
 
 </body>
 </html>

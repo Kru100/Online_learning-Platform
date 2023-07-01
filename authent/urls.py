@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+
     path('', views.index, name='home'),
     path('signup/', views.register, name='signup'),
     path('otp/',views.otp, name='otp'),

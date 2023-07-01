@@ -40,7 +40,7 @@
                 <button type="button" class="btn btn-primary mb-3" onclick="location.href='{% url 'login' %}'"> Login </button>
               </li>
               <li class="nav-item me-4 fs-5 mt-md-1">
-                <button type="button" class="btn btn-danger" onclick="location.href='{% url 'signup' %}'"> Sign Up</button>
+                <button type="button" class="btn btn-success" onclick="location.href='{% url 'signup' %}'"> Sign Up</button>
               </li>
               
             </ul>
@@ -51,7 +51,7 @@
 
 
       {% if messages %}
-      <div class="alert alert-danger mt-2" role="alert">
+      <div class="alert alert-danger mt-2" role="alert" id="message-container">
    
         {%for message in messages%}
         <p>{{ message }}</p>
@@ -60,6 +60,13 @@
       
     </div>
     {% endif %}
+
+    <script>
+      // Hide the message after 3 to 4 seconds (3000 to 4000 milliseconds)
+      setTimeout(function() {
+        document.getElementById('message-container').style.display = 'none';
+      }, 2000);
+    </script>
 
       <div class="container">
         <div class="row gx-0 mt-5 ">
