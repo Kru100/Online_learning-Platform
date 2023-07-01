@@ -23,6 +23,11 @@ class Course(models.Model):
     time_needed = models.CharField(max_length=100, default=None)
     created_at = models.DateTimeField(default=None)
     price = models.IntegerField(default=0)
+    enrolled = models.ArrayReferenceField(
+        to=User,
+        on_delete=models.CASCADE,
+        default = None
+    )
     objects = models.DjongoManager()
     
 class Quiz_details(models.Model):
