@@ -19,6 +19,7 @@ class User(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length=100)
     instructor = models.EmailField()
+    instructor_name = models.CharField(max_length=100 ,default=None)
     description = models.CharField(max_length=250, default = None)
     time_needed = models.CharField(max_length=100, default=None)
     created_at = models.DateTimeField(default=None)
