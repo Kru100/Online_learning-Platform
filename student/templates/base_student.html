@@ -64,6 +64,17 @@
     
     </div>
 
+    {% if messages %}
+    <div class="alert alert-success mt-2" role="alert" id="message-container">
+ 
+      {%for message in messages%}
+      <p>{{ message }}</p>
+      {% endfor %}
+      
+    
+  </div>
+  {% endif %}
+
     {% block body %}
     {% endblock %}
 

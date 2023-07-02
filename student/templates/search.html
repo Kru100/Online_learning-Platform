@@ -27,7 +27,7 @@
     <div class="card-body">
       <h5 class="card-title"> Instructor -  {{ res.instructor_name }} </h5>
       <p class="card-text"> Details - {{ res.description }} </p>
-      <a href="#" class="btn btn-primary">Price - {{ res.price }}</a>
+      <a href="{% url 'course-single' res.id %}" class="btn btn-primary stretched-link">Price - {{ res.price }}</a>
     </div>
   </div>
 

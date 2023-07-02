@@ -34,8 +34,6 @@ class Course(models.Model):
 class Quiz_details(models.Model):
     course_id = models.IntegerField()
     quiz_name = models.CharField(max_length=100)
-    marks = models.JSONField(default=None)
-    time = models.CharField(max_length=100)
     objects = models.DjongoManager()
     
 class Quiz(models.Model):
@@ -47,6 +45,7 @@ class Quiz(models.Model):
     opt3 = models.CharField(max_length=250)
     opt4 = models.CharField(max_length=250)
     answer = models.IntegerField()
+    marks = models.IntegerField(default=1)
     objects = models.DjongoManager()
 
 class Video(models.Model):
