@@ -48,6 +48,8 @@ def course_single(request,course_id):
    try: 
        course = Course.objects.get(id=course_id)
        quiz = Quiz_details.objects.filter(course_id=course_id).all()
+       videos = Video.objects.filter(course_id=course_id).all()
+       enrolled_length = len(course.enrolled.all())
       #  enroll = False
 
       #  if request.session.get('email'):
@@ -55,6 +57,9 @@ def course_single(request,course_id):
 
        context = {
          'course' : course,
+          'quizs' : quiz,
+         'videos' : videos,
+         'length' : enrolled_length,
       #    'enrolled' : enroll,
         }
 
