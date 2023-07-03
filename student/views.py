@@ -96,9 +96,59 @@ def enroll_student(request, course_id):
      
      except Exception as e:
         print(e)
-          
 
-   
+def student_quiz_show(request,course_id,quiz_id):
+    
+   try:
+       
+      
+        quizz = Quiz.objects.filter(quiz_id=quiz_id)
+
+        context ={
+        'quizs' : quizz,
+       }
+
+        return render(request,'stu_quiz_show.html',context)
+          
+   except Exception as e:
+        print(e)
+
+def calculate_marks(request,quiz_id):
+    
+    if request.method == 'POST':
+        
+        total_marks = 0
+        paper_marks = 0
+        answers = []
+
+        for key, value in request.POST.items():
+          if key.startswith('quiz') and key != 'csrfmiddlewaretoken':
+
+            question_id = key[4:]
+            answer = value 
+            
+            question = Quiz.objects.get(id=question_id)
+
+            if int(answer) == question.answer:
+                total_marks += question.marks
+                paper_marks += question.marks
+                
+            else:
+                    paper_marks += question.marks
+
+            answers.append((question.question, answer, question.answer, 
+                            question.opt1,question.opt2,
+                            question.opt3,question.opt4))  
+
+        context = {
+          'marks' : total_marks,
+          'paper_marks' : paper_marks,
+          'answers': answers
+        }
+            
+        return render(request,'correct_answer.html',context)
+
+        
 
 
     

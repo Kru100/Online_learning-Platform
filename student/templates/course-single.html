@@ -22,9 +22,9 @@
   <body>
 
     
-    <div class="container mt-5 bg-light">
+    <div class="container my-5 bg-light shadow-sm pb-4">
 
-        <div class="row p-4 shadow-sm">
+        <div class="row p-4">
 
             <div class="col-8 pt-5">
 
@@ -32,7 +32,7 @@
                    {{ course.name }}
                 </h1>
 
-                <h1 class="fs-4 fw-medium text-capitalize">
+                <h1 class="fs-4 fw-medium text-capitalize mb-5">
                     Instructor - {{ course.instructor_name }}
                 </h1>
 
@@ -54,13 +54,13 @@
               {% if request.session.email %}
           
             
-            <a href="{% url 'enrollment' course.id %}" class="btn btn-danger mb-3"> Buy Now </a>
+              <a href="{% url 'enrollment' course.id %}" class="btn btn-danger mb-3"> Buy Now </a>
         
-          {% else %}
-       
-         <a href="{% url 'login' %}" class="btn btn-danger mb-3">Enroll me</a>
+               {% else %}
 
-           {% endif %}
+              <a href="{% url 'login' %}" class="btn btn-danger mb-3">Enroll me</a>
+
+             {% endif %}
        
                   </div>
 
@@ -80,6 +80,25 @@
             </div>
     
     
+        </div>
+
+        <div class="row">
+
+          <div class="col">
+         
+            {% for quiz in quizs %}
+
+            <a class="fs-5 fw-semibold" href="{% url 'student_quiz_show' quiz.course_id quiz.id %}">  {{ quiz.quiz_name }} </a>
+            <hr>
+
+            
+
+            {% endfor %}
+
+         
+ 
+          </div>
+
         </div>
 
     </div>
