@@ -14,11 +14,17 @@ class User(models.Model):
     password = models.CharField(max_length=64)
     otp = models.IntegerField(default = 0)
     token = models.CharField(max_length=100, default=None)
+    enrolled_courses = models.ArrayReferenceField(
+        to='Course',
+        on_delete=models.CASCADE,
+        default=None
+    )
     objects = models.DjongoManager()
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
     instructor = models.EmailField()
+    instructor_name = models.CharField(max_length=100 ,default=None)
     description = models.CharField(max_length=250, default = None)
     time_needed = models.CharField(max_length=100, default=None)
     created_at = models.DateTimeField(default=None)
@@ -33,8 +39,6 @@ class Course(models.Model):
 class Quiz_details(models.Model):
     course_id = models.IntegerField()
     quiz_name = models.CharField(max_length=100)
-    marks = models.JSONField(default=None)
-    time = models.CharField(max_length=100)
     objects = models.DjongoManager()
     
 class Quiz(models.Model):
@@ -46,6 +50,7 @@ class Quiz(models.Model):
     opt3 = models.CharField(max_length=250)
     opt4 = models.CharField(max_length=250)
     answer = models.IntegerField()
+    marks = models.IntegerField(default=1)
     objects = models.DjongoManager()
 
 class Video(models.Model):

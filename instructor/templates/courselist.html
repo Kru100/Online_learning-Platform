@@ -52,27 +52,24 @@
  
 
         {% for c in course %}
-        <div class="accordion" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                {{c.name}}             
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <strong>
-                  {{ c.description }}                  
-                </strong> </br>
-                <strong> Time Needed : </strong><p> {{ c.time_needed}} </p>
-                <strong> Created At : </strong><p> {{ c.created_at}} </p>
-                <a href={% url 'course' c.id %}> <button class="btn btn-primary">Go to Course</button></a> 
-              </div>
-            </div>
-          </div>
-        
-        </div>
-        {% endfor %}
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ c.id }}" aria-expanded="true" aria-controls="collapse{{ c.id }}">
+        {{ c.name }}             
+      </button>
+    </h2>
+    <div id="collapse{{ c.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>{{ c.description }}</strong><br>
+        <strong>Time Needed: </strong><p>{{ c.time_needed }}</p>
+        <strong>Created At: </strong><p>{{ c.created_at }}</p>
+        <a href="{% url 'course' c.id %}"><button class="btn btn-primary">Go to Course</button></a> 
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
 
 
         </div>
