@@ -22,7 +22,7 @@
 
   <body>
    
-    <div class="container d-flex justify-content-center mt-3">
+    <div class="container d-flex justify-content-center mt-3 mb-3">
 
         {% if quizs %}
       {% for quiz in quizs %}
@@ -31,12 +31,12 @@
 
         {% csrf_token %}
 
-        <h1 class="fs-5 fw-semibold">  {{ forloop.counter }}. {{ quiz.question }} </h1>
+        <h1 class="fs-5 fw-semibold">  {{ forloop.counter }}. {{ quiz.question }} (marks - {{quiz.marks }}) </h1>
         
-        <label>  <input type="radio" value="1" name="quiz{{quiz.id}}"> <span>  {{quiz.opt1}} </span>  </label>
-        <label>  <input type="radio" value="2" name="quiz{{quiz.id}}"> <span>  {{quiz.opt2}} </span>  </label>
-        <label>  <input type="radio" value="3" name="quiz{{quiz.id}}"> <span>  {{quiz.opt3}} </span>  </label>
-        <label>  <input type="radio" value="4" name="quiz{{quiz.id}}"> <span>  {{quiz.opt4}} </span>  </label>
+        <label>  <input type="radio" value="1" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt1}} </span>  </label>
+        <label>  <input type="radio" value="2" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt2}} </span>  </label>
+        <label>  <input type="radio" value="3" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt3}} </span>  </label>
+        <label>  <input type="radio" value="4" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt4}} </span>  </label>
           
 
       {% endfor %}

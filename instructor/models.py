@@ -14,6 +14,11 @@ class User(models.Model):
     password = models.CharField(max_length=64)
     otp = models.IntegerField(default = 0)
     token = models.CharField(max_length=100, default=None)
+    enrolled_courses = models.ArrayReferenceField(
+        to='Course',
+        on_delete=models.CASCADE,
+        default=None
+    )
     objects = models.DjongoManager()
 
 class Course(models.Model):

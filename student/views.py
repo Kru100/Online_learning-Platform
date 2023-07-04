@@ -13,7 +13,10 @@ def indexpage(request):
     email = request.session.get('email')
 
     user = User.objects.get(email=email)
-    return render(request, 'home.html', {'user': user})
+
+    courses = user.enrolled_courses.all()
+
+    return render(request, 'home.html', {'user': user , 'courses' : courses})
 
 
 def search_course(request):
@@ -85,6 +88,8 @@ def enroll_student(request, course_id):
         # Add the user to the enrolled array of the course
         course.enrolled.add(user)
 
+        user.enrolled_courses.add(course)
+
         # Save the updated course
         course.save()
         
@@ -125,11 +130,11 @@ def calculate_marks(request,quiz_id):
           if key.startswith('quiz') and key != 'csrfmiddlewaretoken':
 
             question_id = key[4:]
-            answer = value 
+            answer = int(value) 
             
             question = Quiz.objects.get(id=question_id)
 
-            if int(answer) == question.answer:
+            if answer == question.answer:
                 total_marks += question.marks
                 paper_marks += question.marks
                 
