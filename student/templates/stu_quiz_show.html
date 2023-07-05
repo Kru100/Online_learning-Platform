@@ -1,0 +1,63 @@
+{% extends 'base_student.html' %}
+
+
+
+
+{% block body %}
+
+{% load static %}
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> student quiz show  </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'radio.css' %}">
+  </head>
+
+  
+
+  <body>
+   
+    <div class="container d-flex justify-content-center mt-3 mb-3">
+
+        {% if quizs %}
+      {% for quiz in quizs %}
+
+      <form method="POST" action="{% url 'calculate' quiz.quiz_id %}">
+
+        {% csrf_token %}
+
+        <h1 class="fs-5 fw-semibold">  {{ forloop.counter }}. {{ quiz.question }} (marks - {{quiz.marks }}) </h1>
+        
+        <label>  <input type="radio" value="1" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt1}} </span>  </label>
+        <label>  <input type="radio" value="2" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt2}} </span>  </label>
+        <label>  <input type="radio" value="3" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt3}} </span>  </label>
+        <label>  <input type="radio" value="4" name="quiz{{quiz.id}}" required> <span>  {{quiz.opt4}} </span>  </label>
+          
+
+      {% endfor %}
+
+      <button class="btn btn-primary" type="submit"> submit </button>
+
+      </form>
+
+      
+
+      {% else %}
+ 
+       <h1 class="fs-4 fw-semibold"> No questions in quiz </h1>
+
+      {% endif %}
+     
+    </div>
+
+      
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+  {% endblock %}
+</html>
+

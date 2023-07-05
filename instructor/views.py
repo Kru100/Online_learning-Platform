@@ -15,28 +15,24 @@ def home(request):
 @custom_login_required
 def add_course(request):
     try:
-        email = request.session.get('email')
-        user = User.objects.get(email=email)
-        if user.is_instructor == True:
-            if request.method == 'POST':
-                name = request.POST.get('name')
-                instructor = request.session.get('email')
-                description = request.POST.get('description')
-                time_needed = request.POST.get('time_needed')
-                created_at = date.today()
-                price = request.POST.get('price')
-                user = User.objects.filter(email=instructor).first()
-                if user.is_instructor == False:
-                    msg = "Your have no rights to add course."
-                    messages.add_message(request, messages.INFO, msg)
-                    return render(request, 'courseadd.html')
-                course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at, price=price)
-                course.save()
-                msg = "Course added successfully."
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            instructor = request.session.get('email')
+            description = request.POST.get('description')
+            time_needed = request.POST.get('time_needed')
+            created_at = date.today()
+            price = request.POST.get('price')
+            user = User.objects.filter(email=instructor).first()
+            if user.is_instructor == False:
+                msg = "Your have no rights to add course."
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'courseadd.html')
+            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at, price=price)
+            course.save()
+            msg = "Course added successfully."
+            messages.add_message(request, messages.INFO, msg)
             return render(request, 'courseadd.html')
-        return redirect('error404/')
+        return render(request, 'courseadd.html')
     except Exception as e:
         print(e)
         
@@ -79,31 +75,27 @@ def courselist(request):
 @custom_login_required      
 def createQuiz(request, course_id):
     try:
-        email = request.session.get('email')
-        user = User.objects.get(email=email)
-        if user.is_instructor == True:
-            if request.method == 'POST':
-                quizname = request.POST.get('quizname')
-                total_marks = request.POST.get('total_marks')
-                time = request.POST.get('time')
-                quiz = Quiz_details.objects.filter(course_id=course_id).all()
-                for q in quiz:
-                    if q.quiz_name == quizname:
-                        messages.add_message(request, messages.INFO, "Quiz already exists.")
-                        return redirect(reverse('quizz', kwargs={'course_id': course_id}))
-                quiz = Quiz_details(course_id=course_id,quiz_name=quizname,total_marks=total_marks,time=time)
-                quiz.save()
-                messages.add_message(request, messages.INFO, "Quiz Added")
-                return redirect(reverse('quizz', kwargs={'course_id': course_id}))
-
-            course = Course.objects.get(id=course_id)
+        if request.method == 'POST':
+            quizname = request.POST.get('quizname')
+            total_marks = request.POST.get('total_marks')
+            time = request.POST.get('time')
             quiz = Quiz_details.objects.filter(course_id=course_id).all()
-            context = {
-                    'quiz' : quiz,
-                    'course' : course,
-                }
-            return render(request,'coursehome.html',context)
-        return redirect('error404')
+            for q in quiz:
+                if q.quiz_name == quizname:
+                    messages.add_message(request, messages.INFO, "Quiz already exists.")
+                    return redirect(reverse('quizz', kwargs={'course_id': course_id}))
+            quiz = Quiz_details(course_id=course_id,quiz_name=quizname,total_marks=total_marks,time=time)
+            quiz.save()
+            messages.add_message(request, messages.INFO, "Quiz Added")
+            return redirect(reverse('quizz', kwargs={'course_id': course_id}))
+        
+        course = Course.objects.get(id=course_id)
+        quiz = Quiz_details.objects.filter(course_id=course_id).all()
+        context = {
+                'quiz' : quiz,
+                'course' : course,
+            }
+        return render(request,'coursehome.html',context)
     except Exception as e:
         print(e)
         
