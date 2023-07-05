@@ -18,6 +18,7 @@ urlpatterns = [
     path('course/<int:course_id>/',views.courseHome, name='course'),
     path('course/delete/<int:course_id>', views.delete_course, name='delete_course'),
     path('edit-course/<int:course_id>', views.edit_course, name='edit_course'),
+    path('error404', views.error404, name='error404'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

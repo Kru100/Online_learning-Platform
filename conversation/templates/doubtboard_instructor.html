@@ -20,21 +20,21 @@
     <div>
         <section class="py-5">
             <div class="container">      
-                {% if doubts %}
-                    {% for d in doubts%}
+                    {% for d in db %}
                     <div class="row ">
-                        <div class="col-lg-6 bg-white">        
+                        <div class="col-lg-6 bg-white">
+                            {% if d.is_replied == False %}        
                             <div class="card border-primary mb-3">
                                 <div class="card-body">
                                   <h6 class="card-title">{{d.doubt}}</h6>
                                   <p class="card-text">{{d.sender}} - {{d.time}}</p> </br>
-                                  <a href={% url 'reply-doubt' d.course d.id %}> <button class="btn btn-primary">Reply</button></a>  
+                                  <a href={% url 'reply-doubt' d.course_id d.id %}> <button class="btn btn-primary">Reply</button></a>  
                                 </div>
                               </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
-                {% endif %}
             </div>
         </section>
     </div>

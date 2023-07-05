@@ -1,0 +1,9 @@
+
+acc_1 is a placeholder for the account ID of the linked account you create for the teacher on Razorpay.
+When you create a linked account for a teacher, Razorpay will provide you with an account ID that you can use to refer to that account when 
+creating routes. 
+It's not the bank account number of the teacher, but an identifier used by Razorpay.
+As for where to apply this code, it would typically be in a view or a service that gets called when a student enrolls in a course.
+For example, you might have an EnrollmentCreateView that handles the enrollment process. 
+This view would collect the necessary information from the student, create the order with Razorpay, and then create an Enrollment instance 
+in your database if the payment is successful.
