@@ -4,6 +4,7 @@ from django.urls import reverse
 from instructor.models import *
 from django.contrib.auth.decorators import login_required
 from authent.views import *
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -20,6 +21,7 @@ def indexpage(request):
 
 
 def search_course(request):
+
 
       query = request.GET['query']
       allcourse = list(Course.objects.filter(name__icontains=query))
@@ -44,7 +46,6 @@ def search_course(request):
        }
 
       return render(request,'search.html',context)
-
 
 def course_single(request,course_id):
     
@@ -153,7 +154,23 @@ def calculate_marks(request,quiz_id):
             
         return render(request,'correct_answer.html',context)
 
-        
+def videos_pagination(request,course_id):
+    
+     videos = Video.objects.filter(course_id=course_id)
+     paginator = Paginator(videos, 1)  # 1 video per page
+
+     page_number = request.GET.get('page')  # Get the page number from the request's GET parameters
+     page_obj = paginator.get_page(page_number)  # Get the corresponding page object
+
+     context = {
+        'videos': page_obj,
+        'course_id' : course_id,
+     }
+
+     return render(request, 'videos.html', context)
+           
+
+   
 
 
     

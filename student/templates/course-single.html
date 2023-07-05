@@ -40,6 +40,8 @@
 
                    {{ course.description }}
                 </h1>
+
+                <a class="btn btn-info mt-3" href="{% url 'video-pagination' course.id %}"> get started </a>
     
             </div>
     
@@ -88,8 +90,12 @@
          
             {% for quiz in quizs %}
 
-            <a class="fs-5 fw-semibold" href="{% url 'student_quiz_show' quiz.course_id quiz.id %}">  {{ quiz.quiz_name }} </a>
-            <hr>
+
+             <div class="border p-4 bg-white" style="position: relative;">
+                <a class="fs-5 fw-semibold text-black text-decoration-none stretched-link" href="{% url 'student_quiz_show' quiz.course_id quiz.id %}">  {{ quiz.quiz_name }} </a>
+             </div>
+           
+          
 
             
 
