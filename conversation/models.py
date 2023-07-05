@@ -37,6 +37,7 @@ class Feedback(models.Model):
     course_id = models.IntegerField()
     email = models.EmailField()
     feedback = models.CharField(max_length=5000)
+    star = models.IntegerField(default=None)
     objects = models.DjongoManager()
 
 class Notifications(models.Model):
