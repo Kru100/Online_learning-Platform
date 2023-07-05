@@ -16,17 +16,15 @@
     
      <div class="container">
 
-      <div class="d-flex justify-content-center">
-        <a href="{% url 'course-single' course_id %}" class="text-decoration-none fs-4 fw-semibold"> course content </a>
+      <div class="d-flex justify-content-center mb-4 mt-2">
+        <a href="{% url 'course-single' course_id %}" class="text-decoration-none fs-4 fw-semibold"> Go to Course  </a>
 
       </div>
       
     
-
-    <div class="d-flex justify-content-center mb-3">
-
-
-      {% if videos %}
+      <div class="row ">
+        <div class="col-8">
+          {% if videos %}
       <div class="video-list">
 
        
@@ -46,38 +44,34 @@
        </h1>
       {% endif %}
 
-
-    </div>
-       
-    
       <div class="d-flex justify-content-center">
 
         <nav aria-label="...">
           <ul class="pagination">
-
+  
             {% if videos.has_previous %}
-
+  
             <li class="page-item">
     
                 <a href="?page={{ videos.previous_page_number }}" class="page-link">Previous</a>
                 
             </li>
-
+  
                 {% else %}
-
+  
                 <li class="page-item disabled">
     
                   <a href="" class="page-link">Previous</a>
                   
               </li>
-
-
-
+  
+  
+  
               {% endif %}
-
-
+  
+  
      
-
+  
             <li class="page-item active" aria-current="page">
               <a class="page-link" href="#"> {{ videos.number }} </a>
             </li>
@@ -87,7 +81,7 @@
                 
         
               {% if videos.has_next %}
-
+  
               <li class="page-item">
       
                   <a href="?page={{ videos.next_page_number }}" class="page-link">next </a>
@@ -105,18 +99,45 @@
                 {% endif %}
          
             </li>
-
+  
           </ul>
         </nav>
        
+      </div>
+
+      
+
+       
+        </div>
+        <div class="col-4">
+
+
+          <div class="py-2 border ps-5">
+            <h1 class="fs-4 fw-semibold"> Course content </h1>
+          </div>
+          {% if videos2 %}
  
-         
-      
-      
-      
-   
-  
-       </div>
+          {% for v in videos2 %}
+
+          <div class="fs-4 fw-semibold p-2 border" style="position: relative;">
+          <a href="?page= {{forloop.counter}}" class="stretched-link text-decoration-none ms-3 text-danger"> 
+            {% if videos.number == forloop.counter %} <i class="fa-solid fa-square-check me-3"></i> {% else %} <i class="fa-regular fa-square me-3"></i>  {% endif %} {{forloop.counter}}. {{ v.video_title }}</a>
+          </div>
+       
+
+          {% endfor %}
+ 
+          {% endif %}
+
+        </div>
+
+
+      </div>
+
+     
+       
+    
+     
   
      </div>
 

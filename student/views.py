@@ -108,7 +108,9 @@ def student_quiz_show(request,course_id,quiz_id):
    try:
        
       
-        quizz = Quiz.objects.filter(quiz_id=quiz_id)
+        quizz = list(Quiz.objects.filter(quiz_id=quiz_id))
+
+        random.shuffle(quizz)
 
         context ={
         'quizs' : quizz,
@@ -165,9 +167,21 @@ def videos_pagination(request,course_id):
      context = {
         'videos': page_obj,
         'course_id' : course_id,
+        'videos2' : videos,
      }
 
      return render(request, 'videos.html', context)
+
+def student_profile(request):
+    email = request.session.get('email')
+    user = User.objects.get(email=email)
+
+    context = {
+        'user' : user,
+    }
+
+    return render(request,'student_profile.html',context)
+
            
 
    
