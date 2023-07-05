@@ -25,6 +25,8 @@
 
     <div class="d-flex justify-content-center mb-3">
 
+
+      {% if videos %}
       <div class="video-list">
 
        
@@ -37,6 +39,12 @@
       
         {% endfor %}
       </div>
+      {% else %}
+
+       <h1 class="fs-4 fw-semibold">
+        Not any video for this course.
+       </h1>
+      {% endif %}
 
 
     </div>
