@@ -6,9 +6,16 @@ from django.contrib import messages
 
 def anounce_home(request, course_id):
     try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
         an = Anouncement.objects.filter(course=course_id).order_by('-time')
         course = Course.objects.get(id=course_id)
-        return render(request, 'anouncement_home.html', {'an': an, 'course': course})
+        context = {}
+        if user.is_instructor == True:
+            context = {'an': an, 'course': course, 'user': user}
+        else:
+            context = {'an': an, 'course': course}
+        return render(request, 'anouncement_home.html', context)
     except Exception as e:
         print(e)        
 
@@ -17,9 +24,14 @@ def make_announcement(request, course_id):
         if request.method == 'POST':
             sender = request.session.get('email')
             anouncement = request.POST.get('anouncement')
-            an = Anouncement(sender=sender, anouncement=anouncement, course=course_id)
+            urls = request.POST.get('urls')
+            an = Anouncement(sender=sender,urls=urls, anouncement=anouncement, course=course_id)
             an.save()
             messages.add_message(request, messages.INFO, 'Announcement Created successfully!!!')
+            #The notification functionality will be added here.
+            course = Course.objects.get(id=course_id)
+            for user in course.enrolled.all():
+                Notifications.objects.create(student=user.id, course_id=course_id, text=f'New Notification in {course.name}')
             return redirect(reverse('annoucement', kwargs={'course_id': course_id}))
         return render(request, 'make-anouncement.html')
     except Exception as e:
@@ -28,65 +40,115 @@ def make_announcement(request, course_id):
 def ask_doubt(request, course_id):
     try:
         if request.method == 'POST':
-            sender = request.session.get('email')
+            email = request.session.get('email')
             doubt = request.POST.get('doubt')
-            # if len(doubt)>1000:
-            #     messages.add_message(request, messages.INFO, 'Only 1000 words allowed!!!')
-            #     return render(request, 'ask-doubt.html')
-            d = Doubt(sender=sender, doubt=doubt, course=course_id)
-            d.save()
-            user = User.objects.get(email=sender)
-            print(user)
-            print(user.is_student)
-            if user.is_student == True:
-                return redirect(reverse('doubt-index-student', kwargs={'course_id': course_id})) 
-            else:
-                return redirect(reverse('doubt-index-instructor', kwargs={'course_id': course_id})) 
-        return render(request, 'ask-doubt.html')       
+            db = Doubt_ask(course_id=course_id, sender=email, doubt=doubt)
+            db.save()
+            messages.add_message(request, messages.INFO,"Doubt Posted Successfully")
+            return redirect(reverse('student-doubt', kwargs={'course_id': course_id}))
+        return render(request,'ask-doubt.html')
     except Exception as e:
         print(e)
         
-def reply_doubt(request, course_id, doubt_id):
+def reply_doubt(request, course_id, ask_id):
     try:
         if request.method == 'POST':
-            rcv = request.session.get('email')
+            email = request.session.get('email')            
             reply = request.POST.get('reply')
-            d = Doubt.objects.get(id=doubt_id)
-            d.rcv = rcv
-            d.reply = reply
-            d.is_replied = True
-            d.save()
-            print(d.is_replied)
-            user = User.objects.get(email=rcv)
-            
-            if user.is_student == True:
-                return redirect(reverse('doubt-index-student', kwargs={'course_id': course_id})) 
-            else:
-                return redirect(reverse('doubt-index-instructor', kwargs={'course_id': course_id})) 
-        return render(request, 'reply.html')
+            dr = Doubt_ask.objects.get(id=ask_id)
+            sender = dr.sender
+            db = Doubt_replied(course_id=course_id, ask_id=ask_id, sender=sender, receiver=email,reply=reply)
+            db.save()
+            dbp = Doubt_replied.objects.get(ask_id = ask_id)
+            dbs = Doubt_ask.objects.get(id=ask_id)
+            dbs.is_replied = True
+            dbs.reply_id = dbp.id
+            dbs.save()
+            messages.add_message(request, messages.INFO,"Replied Successfully")
+            return redirect(reverse('instructor-doubt', kwargs={'course_id': course_id})) 
+        return render(request,'reply.html')           
     except Exception as e:
         print(e)
         
-def doubtboard_for_instructor(request, course_id):
+def doubtboard_instructor(request, course_id):
     try:
-        print(1)
-        d = Doubt.objects.filter(course=course_id, is_replied = False).order_by('time')
-        #d = d.filter(is_replied=False)
-        course = Course.objects.get(id=course_id)
-        print(3)
-        return render(request, 'doubtboard_instructor.html', {'doubts': d, 'course': course})
+        db = Doubt_ask.objects.filter(course_id=course_id).all()
+        return render(request,'doubtboard_instructor.html', {'db': db})
     except Exception as e:
         print(e)
         
-def doubtboard_for_student(request, course_id):
+def doubtboard_student(request, course_id):
     try:
-        print(1)
         email = request.session.get('email')
-        print(2)
-        d = Doubt.objects.filter(course=course_id, sender=email).order_by('time')
-        print(3)
-        course = Course.objects.get(id=course_id)
-        print(4)
-        return render(request, 'doubtboard_student.html', {'doubts': d, 'course': course})
+        db = Doubt_ask.objects.filter(sender=email,course_id=course_id).all()
+        dr = Doubt_replied.objects.filter(sender=email,course_id=course_id).all()
+        return render(request, 'doubtboard_student.html', { 'db' : db, 'dr' : dr})
     except Exception as e:
         print(e)
+
+def getHelp(request):
+    try:
+        if request.method == 'POST':
+            email = request.session.get('email')
+            helpline = request.POST.get('helpline')
+            helps = Help(email=email, helpline=helpline)
+            helps.save()
+            messages.add_message(request, messages.INFO, 'Your Query is being sent successfully!!')
+            return render(request, 'gethelp.html')
+        return render(request, 'gethelp.html')
+    except Exception as e:
+        print(e)
+        
+def make_Feedback(request, course_id):
+    try:
+        if request.method == 'POST':
+            email = request.session.get('email')
+            feedback = request.POST.get('feedback')
+            fb = Feedback(email=email, feedback=feedback, course_id=course_id)
+            fb.save()
+            messages.add_message(request,messages.INFO, 'Thank you for your feedback!!!')
+            return render(request, 'feedback.html')
+        return render(request, 'feedback.html')
+    except Exception as e:
+        print(e)
+        
+def show_feedback(request, course_id):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        if user.is_instructor == True:
+            fb = Feedback.objects.filter(course_id=course_id)
+            return render(request, 'show-feedback.html', {'fb':fb})
+        return redirect('error/')
+    except Exception as e:
+        print(e)
+        
+def show_help(request):
+    try:
+        hp = Help.objects.filter().all()
+        return render(request, 'show-help.html', {'hp':hp})
+    except Exception as e:
+        print(e)
+        
+def solve_query(request, id):
+    try:
+        hp = Help.objects.get(id=id)
+        hp.delete()     
+        messages.add_message(request, messages.INFO, "Query is solved!!")
+        return redirect(reverse('show-help'))
+    except Exception as e:
+        print(e)
+        
+def notification_board(request, course_id):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        notify = Notifications.objects.filter(course_id=course_id, student=user.id)
+        for n in notify:
+            n.is_viewed = True
+            n.save()
+        return render(request,'notification_board.html',{'notify':notify})
+    except Exception as e:
+        print(e)
+        
+#Let's make frontend of it. I'm not a frontend developer so it will be very basic.
