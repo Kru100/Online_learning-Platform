@@ -96,7 +96,7 @@ def doubtboard_instructor(request, course_id):
         email = request.session.get('email')
         user = User.objects.get(email=email)
         ta = TA.objects.get(email=email, course_id=course_id)
-        if user.is_instructor == True or ta.is_TA == True:
+        if user.is_instructor == True or ta != None:
             db = Doubt_ask.objects.filter(course_id=course_id).all()
             return render(request,'doubtboard_instructor.html', {'db': db})
     except Exception as e:
