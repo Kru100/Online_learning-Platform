@@ -75,27 +75,32 @@ def courselist(request):
 @custom_login_required      
 def createQuiz(request, course_id):
     try:
-        if request.method == 'POST':
-            quizname = request.POST.get('quizname')
-            total_marks = request.POST.get('total_marks')
-            time = request.POST.get('time')
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        ta = TA.objects.get(email=email, course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
+            if request.method == 'POST':
+                quizname = request.POST.get('quizname')
+                total_marks = request.POST.get('total_marks')
+                time = request.POST.get('time')
+                quiz = Quiz_details.objects.filter(course_id=course_id).all()
+                for q in quiz:
+                    if q.quiz_name == quizname:
+                        messages.add_message(request, messages.INFO, "Quiz already exists.")
+                        return redirect(reverse('quizz', kwargs={'course_id': course_id}))
+                quiz = Quiz_details(course_id=course_id,quiz_name=quizname,total_marks=total_marks,time=time)
+                quiz.save()
+                messages.add_message(request, messages.INFO, "Quiz Added")
+                return redirect(reverse('quizz', kwargs={'course_id': course_id}))
+
+            course = Course.objects.get(id=course_id)
             quiz = Quiz_details.objects.filter(course_id=course_id).all()
-            for q in quiz:
-                if q.quiz_name == quizname:
-                    messages.add_message(request, messages.INFO, "Quiz already exists.")
-                    return redirect(reverse('quizz', kwargs={'course_id': course_id}))
-            quiz = Quiz_details(course_id=course_id,quiz_name=quizname,total_marks=total_marks,time=time)
-            quiz.save()
-            messages.add_message(request, messages.INFO, "Quiz Added")
-            return redirect(reverse('quizz', kwargs={'course_id': course_id}))
-        
-        course = Course.objects.get(id=course_id)
-        quiz = Quiz_details.objects.filter(course_id=course_id).all()
-        context = {
-                'quiz' : quiz,
-                'course' : course,
-            }
-        return render(request,'coursehome.html',context)
+            context = {
+                    'quiz' : quiz,
+                    'course' : course,
+                }
+            return render(request,'coursehome.html',context)
+        return redirect('error404')
     except Exception as e:
         print(e)
         
@@ -132,11 +137,12 @@ def quizdisplay(request, course_id, quiz_id):
         print(e)
 
 @custom_login_required
-def quiz_show(request,quiz_id):
+def quiz_show(request,course_id,quiz_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.get(email=email,course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
             quizz = Quiz.objects.filter(quiz_id=quiz_id).all()  
             context = {            
                 'quiz' : quizz,           
@@ -151,7 +157,9 @@ def video_upload(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.filter(email=email,course_id=course_id).first()
+        print(ta.is_TA)
+        if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST':
                 video_title = request.POST.get('video_title')
                 video_description = request.POST.get('video_description')
@@ -171,7 +179,8 @@ def edit_question(request,course_id,quiz_id,id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.get(email=email, course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
             quizz = Quiz.objects.get(id=id)
             context = {
                  'quizz' : quizz
@@ -186,7 +195,8 @@ def update_question(request,course_id,quiz_id,id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.get(email=email, course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST' :
                 questions = request.POST.get('question')
                 opt1s = request.POST.get('opt1')
@@ -231,13 +241,17 @@ def courseHome(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.get(email=email, course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
             course = Course.objects.get(id=course_id)
             enrolled_users = course.enrolled.all()
             context = {
                 'course': course,
                 'enrolled_users': enrolled_users
             }
+            if ta.is_TA == True:
+                context['ta'] = ta
+                return render(request, 'course.html', context)
             return render(request, 'course.html', context)
         return redirect('/error404/')
     except Exception as e:
@@ -275,6 +289,7 @@ def edit_course(request, course_id):
                 msg = "Course added successfully."
                 messages.add_message(request, messages.INFO, msg)
                 return redirect(reverse('course',kwargs={'course_id': course_id}))
+                #return redirect(reverse('quiz_show',kwargs={'quiz_id': quiz_id}))
             return render(request, 'edit_course.html')
         return redirect('error404')
     except Exception as e:
@@ -283,6 +298,64 @@ def edit_course(request, course_id):
 def error404(request):
     return render(request, 'error404.html')
 
-            
+@custom_login_required
+def TA_add(request, course_id):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        if user.is_instructor:
+            if request.method == 'POST':
+                email = request.POST.get('email')
+                user = User.objects.get(email=email)
+                if user.is_verified != True:
+                    messages.add_message(request, messages.INFO, "TA must be registered!!!")
+                    return render(request, 'add-TA.html')
+                user = TA(email=email, course_id=course_id, is_TA=True)
+                user.save()
+                return redirect(reverse('TA-list', kwargs={'course_id': course_id}))
+            return render(request, 'add-TA.html')
+        return redirect('error404')
+    except Exception as e:
+        print(e)    
+        
+@custom_login_required
+def TA_list(request, course_id):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        if user.is_instructor:
+            ta = TA.objects.filter(course_id=course_id).all()
+            return render(request, 'TA-list.html', {'ta': ta})
+        return redirect('error404')
+    except Exception as e:
+        print(e)     
    
-
+@custom_login_required            
+def delete_TA(request, course_id, id):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        if user.is_instructor == True:
+            ta = TA.objects.get(id=id)
+            ta.delete()
+            messages.add_message(request, messages.INFO, "TA deleted successfully !!")
+            return redirect(reverse('TA-list', kwargs={'course_id': course_id}))
+        return redirect('error404')
+    except Exception as e:
+        print(e)   
+        
+@custom_login_required
+def course_list_TA(request):
+    try:
+        email = request.session.get('email')
+        ta = TA.objects.get(email=email)
+        if ta.is_TA == True:
+            ta = TA.objects.filter(email=email).all()
+            course=[]
+            for t in ta:
+                c = Course.objects.get(id=t.course_id)
+                course.append(c)
+            return render(request, 'courselistTA.html', {'course': course})
+        return redirect('error404')
+    except Exception as e:
+        print(e)   

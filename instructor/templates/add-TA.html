@@ -1,0 +1,94 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title> Add TA </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'courseadd.css' %}">
+  </head>
+  <body>
+		{% if messages %}
+      <div class="alert alert-primary mt-2" role="alert">
+        <ul class="messages">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="custom-menu">
+					<button type="button" id="sidebarCollapse" class="btn btn-primary">
+	          <i class="fa fa-bars"></i>
+	          <span class="sr-only">Toggle Menu</span>
+	        </button>
+        </div>
+	  		<h1><a href="index.html" class="logo">Nav Bar </a></h1>
+        <ul class="list-unstyled components mb-5">
+          <li>
+            <a href="{% url 'home' %}"><span class="fa fa-home mr-3"></span> Homepage</a>
+          </li>
+          <li>
+              <a href="{% url 'display2' %}"><span class="fa-brands fa-youtube mr-3"> </span> Course</a>
+          </li>
+
+          <li class="active">
+            <a href=""><span class="fa-solid fa-plus mr-3"> </span> Add Course</a>
+          </li>
+          <li>
+            <a href="#"><span class="fa-solid fa-chart-simple mr-3"></span> Performance </a>
+          </li>
+          <li>
+            <a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket  mr-3"></span> Logout </a>
+          </li>
+          <li>
+            <a href="#"><span class="fa fa-paper-plane mr-3"></span> Information</a>
+          </li>
+        </ul>
+
+    	</nav>
+
+        <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5 pt-5">
+         
+       
+<!-- 
+            <a> <div class="addjob"> <i class="fa-solid fa-plus"></i> New Job</div> </a> -->
+            
+             <div class="userimage">
+               <h2 class="mb-4"> Add Teaching Assistant </h2>
+              
+             </div>
+
+             <form method="POST">
+               {% csrf_token %} 
+               <table class="table table-hover">
+                 <tr>
+                   <td>  Email ID  </td>
+                   <td>:</td>
+                   <td> <input type="text" name="email" required> </td>
+                 </tr>
+               
+               </table>
+       
+               <!-- <button class="submit" type="button">Save changes</button> -->
+               <button type="submit" class="btn btn-primary submit" value="insert">Add TA</button>
+             </form>
+       
+          
+        </div>
+		</div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
