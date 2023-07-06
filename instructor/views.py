@@ -87,14 +87,12 @@ def createQuiz(request, course_id):
         if user.is_instructor == True or ta != None:
             if request.method == 'POST':
                 quizname = request.POST.get('quizname')
-                total_marks = request.POST.get('total_marks')
-                time = request.POST.get('time')
                 quiz = Quiz_details.objects.filter(course_id=course_id).all()
                 for q in quiz:
                     if q.quiz_name == quizname:
                         messages.add_message(request, messages.INFO, "Quiz already exists.")
                         return redirect(reverse('quizz', kwargs={'course_id': course_id}))
-                quiz = Quiz_details(course_id=course_id,quiz_name=quizname,total_marks=total_marks,time=time)
+                quiz = Quiz_details(course_id=course_id,quiz_name=quizname)
                 quiz.save()
                 messages.add_message(request, messages.INFO, "Quiz Added")
                 return redirect(reverse('quizz', kwargs={'course_id': course_id}))
