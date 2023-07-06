@@ -17,7 +17,7 @@ def add_course(request):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instrcutor == True:
+        if user.is_instructor == True:
             if request.method == 'POST':
                 name = request.POST.get('name')
                 instructor = request.session.get('email')
@@ -67,8 +67,10 @@ def enrolledCourse(request):
 def courselist(request):
     try:
         email = request.session.get('email')
+        print(1)
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        print(2)
+        if user.is_instructor:
             email = request.session.get('email')
             course = Course.objects.filter(instructor=email).all()
             return render(request, 'courselist.html', {'course': course})
@@ -102,6 +104,7 @@ def createQuiz(request, course_id):
             context = {
                     'quiz' : quiz,
                     'course' : course,
+                    'user':user,
                 }
             return render(request,'coursehome.html',context)
         return redirect('error404')
@@ -172,7 +175,7 @@ def video_upload(request, course_id):
                 messages.add_message(request, messages.INFO, "Video saved successfully.")
                 return redirect(reverse('video_upload', kwargs={'course_id': course_id,}))
             vid = Video.objects.filter(course_id=course_id)
-            return render(request, 'upload.html', {'vid':vid,})
+            return render(request, 'upload.html', {'vid':vid, 'user':user})
         return redirect('error404')
     except Exception as e:
         print(e)
@@ -256,6 +259,8 @@ def courseHome(request, course_id):
                 if ta.is_TA == True:
                     context['ta'] = ta
                     return render(request, 'course.html', context)
+            else:
+                context['user'] = user
             return render(request, 'course.html', context)
         return redirect('/error404/')
     except Exception as e:
