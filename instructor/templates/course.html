@@ -63,10 +63,10 @@
             <a href={% url 'annoucement' course.id %}> <button class="btn btn-secondary">Announcement Board</button></a>
           </div>
           <div class="p-3 text-center skill-block">
-            <a href={% url 'edit_course' course.id %}> <button class="btn btn-dark">Edit</button></a> 
+            {% if user.is_instructor == True %}<a href={% url 'edit_course' course.id %}> <button class="btn btn-dark">Edit</button></a>{% endif %} 
           </div>
           <div class="p-3 text-center skill-block">
-            <a href={% url 'delete_course' course.id %}> <button class="btn btn-danger">Delete</button></a> 
+            {% if user.is_instructor == True %}<a href={% url 'delete_course' course.id %}> <button class="btn btn-danger">Delete</button></a>{% endif %}
           </div>
     </div>
     <table class="table">
@@ -83,7 +83,7 @@
           <tr>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
-            <td><a href=#> <button class="btn btn-primary">Delete</button></a></td>
+            {% if user.is_instructor == True %}<td><a href=#> <button class="btn btn-primary">Delete</button></a></td>{% endif %}
           </tr>    
         {% endfor %}
         </tbody>
