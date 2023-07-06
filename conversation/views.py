@@ -15,8 +15,11 @@ def anounce_home(request, course_id):
         an = Anouncement.objects.filter(course=course_id).order_by('-time')
         course = Course.objects.get(id=course_id)
         context = {}
+        ta = TA.objects.get(email=email, course_id=course_id)
         if user.is_instructor == True:
             context = {'an': an, 'course': course, 'user': user}
+        elif ta.is_TA == True:
+            context = {'an': an, 'course': course, 'ta': ta}
         else:
             context = {'an': an, 'course': course}
         return render(request, 'anouncement_home.html', context)
@@ -28,7 +31,8 @@ def make_announcement(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.filter(email=email, course_id=course_id)
+        if user.is_instructor == True or ta != None:
             if request.method == 'POST':
                 sender = request.session.get('email')
                 anouncement = request.POST.get('anouncement')
@@ -65,7 +69,8 @@ def reply_doubt(request, course_id, ask_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        if user.is_instructor == True:
+        ta = TA.objects.get(email=email, course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST':
                 email = request.session.get('email')            
                 reply = request.POST.get('reply')
@@ -88,8 +93,12 @@ def reply_doubt(request, course_id, ask_id):
 @custom_login_required  
 def doubtboard_instructor(request, course_id):
     try:
-        db = Doubt_ask.objects.filter(course_id=course_id).all()
-        return render(request,'doubtboard_instructor.html', {'db': db})
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        ta = TA.objects.get(email=email, course_id=course_id)
+        if user.is_instructor == True or ta.is_TA == True:
+            db = Doubt_ask.objects.filter(course_id=course_id).all()
+            return render(request,'doubtboard_instructor.html', {'db': db})
     except Exception as e:
         print(e)
 
@@ -97,9 +106,12 @@ def doubtboard_instructor(request, course_id):
 def doubtboard_student(request, course_id):
     try:
         email = request.session.get('email')
-        db = Doubt_ask.objects.filter(sender=email,course_id=course_id).all()
-        dr = Doubt_replied.objects.filter(sender=email,course_id=course_id).all()
-        return render(request, 'doubtboard_student.html', { 'db' : db, 'dr' : dr})
+        user = User.objects.get(email=email)
+        if user.is_student == True:
+            email = request.session.get('email')
+            db = Doubt_ask.objects.filter(sender=email,course_id=course_id).all()
+            dr = Doubt_replied.objects.filter(sender=email,course_id=course_id).all()
+            return render(request, 'doubtboard_student.html', { 'db' : db, 'dr' : dr})
     except Exception as e:
         print(e)
 

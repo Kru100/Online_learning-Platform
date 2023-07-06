@@ -19,7 +19,7 @@
 
     <div>
         <section class="py-5">
-            {% if user.is_instructor == True %}
+            {% if user.is_instructor == True or ta.is_TA == True %}
                 <a href={% url 'do-anouncement' course.id %}> <button class="btn btn-primary d-flex justify-content-center">Make Announcement</button></a>
             {% endif %}
             <div class="container">      

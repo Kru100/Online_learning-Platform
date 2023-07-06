@@ -20,6 +20,12 @@ class User(models.Model):
         default=None
     )
     objects = models.DjongoManager()
+    
+class TA(models.Model):
+    email = models.EmailField()
+    course_id = models.IntegerField()    
+    is_TA = models.BooleanField(default=False)
+    objects = models.DjongoManager()
 
 class Course(models.Model):
     name = models.CharField(max_length=100)

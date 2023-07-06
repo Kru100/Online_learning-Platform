@@ -1,0 +1,24 @@
+{% if messages %}
+      <div class="alert alert-primary mt-2" role="alert">
+        <ul class="messages">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">TA Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for t in ta %}
+      <tr>
+        <td>{{ t.email }}</td>
+        <td><a href={% url 'delete-TA' t.course_id t.id %}> <button class="btn btn-primary">Delete</button></a></td>
+      </tr>    
+    {% endfor %}
+    </tbody>
+  </table>

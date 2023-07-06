@@ -49,9 +49,9 @@
            <div class="col-12 mb-3">
 
             <a href="{% url 'edit_question' q.course_id q.quiz_id q.id %}"> <button class="btn btn-primary"> Update  </button></a>
-
+            {% if user.is_instructor %}
             <a href="{% url 'delete_question' q.course_id q.quiz_id q.id %}"> <button class="btn btn-danger"> Delete </button></a>
-
+            {% endif %}
            </div>
            
 
