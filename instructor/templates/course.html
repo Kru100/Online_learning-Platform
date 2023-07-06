@@ -79,10 +79,10 @@
           </tr>
         </thead>
         <tbody>
-        {% for user in enrolled_users %}
+        {% for us in enrolled_users %}
           <tr>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
+            <td>{{ us.name }}</td>
+            <td>{{ us.email }}</td>
             {% if user.is_instructor == True %}<td><a href=#> <button class="btn btn-primary">Delete</button></a></td>{% endif %}
           </tr>    
         {% endfor %}
