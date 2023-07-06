@@ -15,10 +15,10 @@ def anounce_home(request, course_id):
         an = Anouncement.objects.filter(course=course_id).order_by('-time')
         course = Course.objects.get(id=course_id)
         context = {}
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True:
             context = {'an': an, 'course': course, 'user': user}
-        elif ta.is_TA == True:
+        elif ta != None:
             context = {'an': an, 'course': course, 'ta': ta}
         else:
             context = {'an': an, 'course': course}
