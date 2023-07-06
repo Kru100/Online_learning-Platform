@@ -191,3 +191,13 @@ def notification_board(request, course_id):
         return render(request,'notification_board.html',{'notify':notify})
     except Exception as e:
         print(e)
+        
+@custom_login_required
+def notification(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        notify = Notifications.objects.filter(student=user.id)
+        return render(request,'notification.html', {'notify': notify})
+    except Exception as e:
+        print(e)
