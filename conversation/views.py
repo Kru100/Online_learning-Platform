@@ -118,18 +118,14 @@ def doubtboard_student(request, course_id):
 @custom_login_required
 def getHelp(request):
     try:
-        email = request.session.get('email')
-        user = User.objects.get(email=email)
-        if user.instrcutor == True:
-            if request.method == 'POST':
-                email = request.session.get('email')
-                helpline = request.POST.get('helpline')
-                helps = Help(email=email, helpline=helpline)
-                helps.save()
-                messages.add_message(request, messages.INFO, 'Your Query is being sent successfully!!')
-                return render(request, 'gethelp.html')
+        if request.method == 'POST':
+            email = request.session.get('email')
+            helpline = request.POST.get('helpline')
+            helps = Help(email=email, helpline=helpline)
+            helps.save()
+            messages.add_message(request, messages.INFO, 'Your Query is being sent successfully!!')
             return render(request, 'gethelp.html')
-        return redirect('/error404/')
+        return render(request, 'gethelp.html')
     except Exception as e:
         print(e)
 
