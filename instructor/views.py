@@ -15,24 +15,28 @@ def home(request):
 @custom_login_required
 def add_course(request):
     try:
-        if request.method == 'POST':
-            name = request.POST.get('name')
-            instructor = request.session.get('email')
-            description = request.POST.get('description')
-            time_needed = request.POST.get('time_needed')
-            created_at = date.today()
-            price = request.POST.get('price')
-            user = User.objects.filter(email=instructor).first()
-            if user.is_instructor == False:
-                msg = "Your have no rights to add course."
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        if user.is_instrcutor == True:
+            if request.method == 'POST':
+                name = request.POST.get('name')
+                instructor = request.session.get('email')
+                description = request.POST.get('description')
+                time_needed = request.POST.get('time_needed')
+                created_at = date.today()
+                price = request.POST.get('price')
+                user = User.objects.filter(email=instructor).first()
+                if user.is_instructor == False:
+                    msg = "Your have no rights to add course."
+                    messages.add_message(request, messages.INFO, msg)
+                    return render(request, 'courseadd.html')
+                course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at, price=price)
+                course.save()
+                msg = "Course added successfully."
                 messages.add_message(request, messages.INFO, msg)
                 return render(request, 'courseadd.html')
-            course = Course(name=name, instructor=instructor, description=description, time_needed=time_needed, created_at=created_at, price=price)
-            course.save()
-            msg = "Course added successfully."
-            messages.add_message(request, messages.INFO, msg)
             return render(request, 'courseadd.html')
-        return render(request, 'courseadd.html')
+        return redirect('error404')
     except Exception as e:
         print(e)
         
@@ -77,7 +81,7 @@ def createQuiz(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST':
                 quizname = request.POST.get('quizname')
@@ -141,7 +145,7 @@ def quiz_show(request,course_id,quiz_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email,course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta.is_TA == True:
             quizz = Quiz.objects.filter(quiz_id=quiz_id).all()  
             context = {            
@@ -158,7 +162,6 @@ def video_upload(request, course_id):
         email = request.session.get('email')
         user = User.objects.get(email=email)
         ta = TA.objects.filter(email=email,course_id=course_id).first()
-        print(ta.is_TA)
         if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST':
                 video_title = request.POST.get('video_title')
@@ -179,7 +182,7 @@ def edit_question(request,course_id,quiz_id,id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta.is_TA == True:
             quizz = Quiz.objects.get(id=id)
             context = {
@@ -195,7 +198,7 @@ def update_question(request,course_id,quiz_id,id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST' :
                 questions = request.POST.get('question')
@@ -241,7 +244,7 @@ def courseHome(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta.is_TA == True:
             course = Course.objects.get(id=course_id)
             enrolled_users = course.enrolled.all()
