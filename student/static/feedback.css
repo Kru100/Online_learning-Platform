@@ -1,0 +1,25 @@
+
+.star-widget input{
+    display: none;
+   }
+   
+   .star-widget label{
+       font-size: 20px;
+       color: #444;
+       float: right;
+       transition: all 0.2s ease;
+       margin-right: 8px;
+   }
+   
+   .star-widget input:not(:checked) ~ label:hover,
+   .star-widget input:not(:checked) ~ label:hover ~ label
+   {
+       color: #e59819;
+   }
+   
+   input:checked ~ label {
+       color: #e59819;
+   }
+   
+   
+   
