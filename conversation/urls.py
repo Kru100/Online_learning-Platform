@@ -16,4 +16,5 @@ urlpatterns = [
     path('show-help', views.show_help, name='show-help'),
     path('solve-query/<int:id>', views.solve_query, name='solve-query'),
     path('notification-board/<int:course_id>', views.notification_board, name='notification-board'),  
+    path('notification', views.notification, name='notification')
 ]

@@ -16,17 +16,15 @@
   <body>
    
     <div class="container d-flex flex-column justify-content-center mt-3 mb-3">
-
+      {% if answers %}
       {% for answer in answers %}
       <div>
         {% if answer.1 == answer.2 %}
         <h1 class="fs-5 fw-semibold">Question{{forloop.counter}}: {{ answer.0 }} <span class="text-success"> Correct</span> </h1>
-        <h1 class="fs-6 fw-normal {% if answer.1 == 1 %}text-success fw-semibold{% endif %}">
-          Option1 - {{ answer.3 }}
-        </h1>        
-          <h1 class="fs-6 fw-normal {% if answer.1 == 2 %} text-success fw-semibold  {% endif %}">Option2 - {{ answer.4 }}</h1>
-          <h1 class="fs-6 fw-normal {% if answer.1 == 3 %} text-success fw-semibold {% endif %}">Option3 - {{ answer.5 }}</h1>
-          <h1 class="fs-6 fw-normal {% if answer.1 == 4 %} text-success  fw-semibold {% endif %}">Option4 - {{ answer.6 }}</h1>
+        <h1 class="fs-6 fw-normal {% if answer.1 == 1 %}text-success fw-semibold{% endif %}">Option1 - {{ answer.3 }}</h1>        
+        <h1 class="fs-6 fw-normal {% if answer.1 == 2 %} text-success fw-semibold  {% endif %}">Option2 - {{ answer.4 }}</h1>
+        <h1 class="fs-6 fw-normal {% if answer.1 == 3 %} text-success fw-semibold {% endif %}">Option3 - {{ answer.5 }}</h1>
+        <h1 class="fs-6 fw-normal {% if answer.1 == 4 %} text-success  fw-semibold {% endif %}">Option4 - {{ answer.6 }}</h1>
         {% else %}
          <h1 class="fs-5 fw-semibold">Question{{forloop.counter}}: {{ answer.0 }} <span class="text-danger"> incorrect</span> </h1>
           <h1 class="fs-6 fw-normal {% if answer.1 == 1 %} text-danger fw-semibold {% elif answer.2 == 1 %} text-success fw-semibold {% endif %}">  Option1 - {{ answer.3 }} </h1>        
@@ -39,7 +37,15 @@
         <hr>
       </div>
     {% endfor %}
-  
+    {% else %}
+      {% for answer in answers %}
+        <h1 class="fs-5 fw-semibold">Question{{forloop.counter}}: {{ answer.question }}</h1>
+        <h1 class="fs-6 fw-normal {% if answer.answer == 1 %}text-success fw-semibold{% endif %}">Option1 - {{ answer.opt1 }}</h1>        
+        <h1 class="fs-6 fw-normal {% if answer.answer == 2 %} text-success fw-semibold  {% endif %}">Option2 - {{ answer.opt2 }}</h1>
+        <h1 class="fs-6 fw-normal {% if answer.answer == 3 %} text-success fw-semibold {% endif %}">Option3 - {{ answer.opt3 }}</h1>
+        <h1 class="fs-6 fw-normal {% if answer.answer == 4 %} text-success  fw-semibold {% endif %}">Option4 - {{ answer.opt4 }}</h1>
+        {% endfor %}
+    {% endif %}
 
      <h1 class="fs-4 fw-semibold">  obtained marks -  {{ marks }} / {{ paper_marks }}</h1>
      

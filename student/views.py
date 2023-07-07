@@ -113,11 +113,12 @@ def student_quiz_show(request,course_id,quiz_id):
        
       
         quizz = list(Quiz.objects.filter(quiz_id=quiz_id))
-
+        q = Quiz_details.objects.get(id=quiz_id)
         random.shuffle(quizz)
 
         context ={
         'quizs' : quizz,
+        'q' : q,
        }
 
         return render(request,'stu_quiz_show.html',context)
@@ -157,8 +158,15 @@ def calculate_marks(request,quiz_id):
           'paper_marks' : paper_marks,
           'answers': answers
         }
-            
+                   
         return render(request,'correct_answer.html',context)
+    paper_marks = 0
+    answers = Quiz.objects.filter(quiz_id=quiz_id).all()
+    context = {
+          'paper_marks' : paper_marks,
+          'answers': answers
+        }
+    return render(request,'correct_answer.html',context)
 
 def videos_pagination(request,course_id):
     
@@ -177,31 +185,23 @@ def videos_pagination(request,course_id):
      return render(request, 'videos.html', context)
 
 def student_profile(request):
+  try:
     email = request.session.get('email')
     user = User.objects.get(email=email)
-
+    notify = Notifications.objects.filter(student=user.id).all()
+    new_notifications = False
+    for n in notify:
+      if n.is_viewed == False:
+        new_notifications = True
+        break;
     context = {
         'user' : user,
+        'new_notifications' : new_notifications,
     }
-
     return render(request,'student_profile.html',context)
+  except Exception as e:
+    print(e)
 
-def student_feedback(request,course_id):
-     
-     if request.method == 'POST':
-       user_email =  request.session.get('email')
-       rating = request.POST.get('rate')
-       feed = request.POST.get('feedback')
-       user = User.objects.get(email=user_email)
-
-
-       feedback_user = Feedback(course_id=course_id,email=user_email,user_name=user.name,feedback=feed,star=rating)
-
-       feedback_user.save()
-       return redirect(reverse('course-single',kwargs={'course_id': course_id}))
-     
-
- 
 
 
    

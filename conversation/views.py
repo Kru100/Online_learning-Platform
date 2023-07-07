@@ -191,3 +191,32 @@ def notification_board(request, course_id):
         return render(request,'notification_board.html',{'notify':notify})
     except Exception as e:
         print(e)
+        
+@custom_login_required
+def notification(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        notify = Notifications.objects.filter(student=user.id).all().order_by('-id')
+        notify_ids = [n.id for n in notify if not n.is_viewed]
+        Notifications.objects.filter(id__in=notify_ids).update(is_viewed=True)
+        context = {'notify': notify}
+        # for n in notify:
+        #     n.is_viewed = True
+        #     n.save()
+        return render(request,'notification.html',context)
+    except Exception as e:
+        print(e)
+        
+# @custom_login_required
+# def notified(request):
+#     try:
+#         email = request.session.get('email')
+#         user = User.objects.get(email=email)
+#         notify = Notifications.objects.filter(student=user.id).all()
+
+#         # Get the count of new notifications
+#         new_notifications = notify.filter(is_viewed=False).count()
+#         return render(request, 'base_student.html', {'new_notifications': new_notifications})
+#     except Exception as e:
+#         print(e)
