@@ -26,7 +26,11 @@
                                     
                             <div class="card border-primary mb-3">
                                 <div class="card-body">
-                                  <h6 class="card-title">{{n.text}}</h6>                                   
+                                {% if n.is_viewed %}
+                                    <h6 class="card-title text-info">{{n.text}}</h6>
+                                {% else %}
+                                    <h6 class="card-title text-danger"><b>{{n.text}}</b></h6>
+                                {% endif %}                                     
                                 </div>
                               </div>
                             
