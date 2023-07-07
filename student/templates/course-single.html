@@ -176,9 +176,11 @@
         {% for feed in feedback %}
  
         <div class="col-6">
+
+
            <h1 class="fs-4 fw-semibold"> {{ feed.user_name }}</h1>
 
-           <div id="stars-container"></div>
+           <h1 class="fs-4 fw-semibold"> {{ feed.star  }} <i class="fa-solid fa-star" style="color: #e59819;"></i></h1>
           <h1 class="fs-4 fw-semibold"> {{ feed.feedback }} </h1>
 
         </div>

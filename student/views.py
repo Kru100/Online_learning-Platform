@@ -203,6 +203,22 @@ def student_profile(request):
     print(e)
 
 
+def student_feedback(request,course_id):
+     
+     if request.method == 'POST':
+       user_email =  request.session.get('email')
+       rating = request.POST.get('rate')
+       feed = request.POST.get('feedback')
+       user = User.objects.get(email=user_email)
+
+
+       feedback_user = Feedback(course_id=course_id,email=user_email,user_name=user.name,feedback=feed,star=rating)
+
+       feedback_user.save()
+       return redirect(reverse('course-single',kwargs={'course_id': course_id}))
+     
+
+ 
 
    
 
