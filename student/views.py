@@ -54,6 +54,8 @@ def course_single(request,course_id):
        quiz = Quiz_details.objects.filter(course_id=course_id).all()
        videos = Video.objects.filter(course_id=course_id).all()
        enrolled_length = len(course.enrolled.all())
+       feedback = Feedback.objects.filter(course_id=course_id)
+
       #  enroll = False
 
       #  if request.session.get('email'):
@@ -64,6 +66,7 @@ def course_single(request,course_id):
           'quizs' : quiz,
          'videos' : videos,
          'length' : enrolled_length,
+         'feedback' : feedback,
       #    'enrolled' : enroll,
         }
 
@@ -197,6 +200,26 @@ def student_profile(request):
     return render(request,'student_profile.html',context)
   except Exception as e:
     print(e)
+
+
+
+def student_feedback(request,course_id):
+     
+     if request.method == 'POST':
+       user_email =  request.session.get('email')
+       rating = request.POST.get('rate')
+       feed = request.POST.get('feedback')
+       user = User.objects.get(email=user_email)
+
+
+       feedback_user = Feedback(course_id=course_id,email=user_email,user_name=user.name,feedback=feed,star=rating)
+
+       feedback_user.save()
+       return redirect(reverse('course-single',kwargs={'course_id': course_id}))
+     
+
+ 
+
 
    
 

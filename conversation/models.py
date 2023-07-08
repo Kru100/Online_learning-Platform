@@ -36,6 +36,7 @@ class Help(models.Model):
 class Feedback(models.Model):
     course_id = models.IntegerField()
     email = models.EmailField()
+    user_name = models.CharField(max_length=100,default=None)
     feedback = models.CharField(max_length=5000)
     star = models.IntegerField(default=None)
     objects = models.DjongoManager()
