@@ -21,5 +21,5 @@ urlpatterns = [
     path('', include('instructor.urls')),
     path('', include('conversation.urls')),
     path('', include('student.urls')),
-    #path('administration/', include('administration.urls'))
+    path('', include('administartion.urls'))
 ]
