@@ -39,7 +39,7 @@ def admin(request):
         email = request.session.get('email')
         user = User.objects.filter(email=email).first()
         if user.is_admin:
-            return render(request, "home.html")
+            return render(request, "home1.html")
         return redirect('/error404')
     except Exception as e:
         print(e)
