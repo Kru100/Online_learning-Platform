@@ -28,6 +28,8 @@
                 <div class="card-body">
                   <h5 class="card-title"> Instructor -  {{ res.instructor_name }} </h5>
                   <p class="card-text"> Details - {{ res.description }} </p>
+                  <p class="card-text"> rating - {{ res.rating }} <i class="fa-solid fa-star"  style="color: #e59819;"></i> </p>
+                  <p class="card-text"> rated - {{ res.rated }} </p>
                   <a href="{% url 'course-single' res.id %}" class="btn btn-primary stretched-link">Price - {{ res.price }}</a>
                 </div>
               </div>
