@@ -40,7 +40,6 @@ def make_announcement(request, course_id):
                 an = Anouncement(sender=sender,urls=urls, anouncement=anouncement, course=course_id)
                 an.save()
                 messages.add_message(request, messages.INFO, 'Announcement Created successfully!!!')
-                #The notification functionality will be added here.
                 course = Course.objects.get(id=course_id)
                 for user in course.enrolled.all():
                     Notifications.objects.create(student=user.id, course_id=course_id, text=f'New Notification in {course.name}')
@@ -58,6 +57,9 @@ def ask_doubt(request, course_id):
             doubt = request.POST.get('doubt')
             db = Doubt_ask(course_id=course_id, sender=email, doubt=doubt)
             db.save()
+            n = Course.objects.get(id=course_id)
+            user = User.objects.get(email=n.instructor)
+            Notifications.objects.create(student=user.id, course_id=course_id, text=f'Someone had doubt in {n.name}')
             messages.add_message(request, messages.INFO,"Doubt Posted Successfully")
             return redirect(reverse('student-doubt', kwargs={'course_id': course_id}))
         return render(request,'ask-doubt.html')
@@ -69,7 +71,7 @@ def reply_doubt(request, course_id, ask_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST':
                 email = request.session.get('email')            
@@ -95,10 +97,10 @@ def doubtboard_instructor(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
-        ta = TA.objects.get(email=email, course_id=course_id)
+        ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta != None:
             db = Doubt_ask.objects.filter(course_id=course_id).all()
-            return render(request,'doubtboard_instructor.html', {'db': db})
+            return render(request,'doubtboard_instructor.html', {'db': db, 'user': user, 'ta': ta})
     except Exception as e:
         print(e)
 
@@ -154,7 +156,7 @@ def show_feedback(request, course_id):
         return redirect('error/')
     except Exception as e:
         print(e)
-        
+
 def show_help(request):
     try:
         email = request.session.get('email')
@@ -207,16 +209,3 @@ def notification(request):
         return render(request,'notification.html',context)
     except Exception as e:
         print(e)
-        
-# @custom_login_required
-# def notified(request):
-#     try:
-#         email = request.session.get('email')
-#         user = User.objects.get(email=email)
-#         notify = Notifications.objects.filter(student=user.id).all()
-
-#         # Get the count of new notifications
-#         new_notifications = notify.filter(is_viewed=False).count()
-#         return render(request, 'base_student.html', {'new_notifications': new_notifications})
-#     except Exception as e:
-#         print(e)

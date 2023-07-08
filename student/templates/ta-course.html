@@ -1,0 +1,47 @@
+{% extends 'base_student.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    {% block body %}
+
+    <div class="container mt-3">
+
+        <h1 class="fs-4 fw-semibold"> My Courses:  </h1>
+
+        {% if courses %}
+
+        <div class="d-flex flex-row mt-3">
+
+            {% for res in courses %}
+    
+            <div class="card ms-3 w-25 mb-3">
+                <div class="card-header">
+                  Course  -   {{ res.name }}
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title"> Instructor -  {{ res.instructor_name }} </h5>
+                  <p class="card-text"> Details - {{ res.description }} </p>
+                  <a href="{% url 'course-single' res.id %}" class="btn btn-primary stretched-link">Price - {{ res.price }}</a>
+                </div>
+              </div>
+        
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <h1 class="fs-4 fw-semibold"> you are not any courses enrollment </h1>
+       
+    
+        {% endif %}
+    
+        
+    </div>
