@@ -1,5 +1,48 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from instructor.models import *
 
+def printUser(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()
+        if user.is_admin:
+            user = User.objects.filter().all()
+            return render(request, 'admin-studentlist.html', {'user': user})
+        return redirect('/error404')
+    except Exception as e:
+        print(e)
+
+def printInstructor(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()
+        if user.is_admin:
+            user = User.objects.filter().all()
+            return render(request, 'admin-instructorlist.html', {'user': user})
+        return redirect('/error404')
+    except Exception as e:
+        print(e)
+
+def printCourse(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()
+        if user.is_admin:
+            course = Course.objects.filter().all()
+            return render(request, 'admin-courselist.html', {'course': course})
+        return redirect('/error404')
+    except Exception as e:
+        print(e)
+        
+def admin(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()
+        if user.is_admin:
+            return render(request, "home.html")
+        return redirect('/error404')
+    except Exception as e:
+        print(e)
 # Create your views here.
 # from django.shortcuts import render, get_object_or404
 # from django.http import HttpResponse

@@ -6,8 +6,7 @@ from django.contrib.auth.decorators import login_required
 from authent.views import *
 from django.core.paginator import Paginator
 from conversation.models import *
-
-
+from instructor.views import *
 # Create your views here.
 
 @custom_login_required
@@ -198,7 +197,6 @@ def student_profile(request):
     return render(request,'student_profile.html',context)
   except Exception as e:
     print(e)
-
 
    
 

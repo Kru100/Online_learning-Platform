@@ -332,7 +332,8 @@ def TA_list(request, course_id):
         user = User.objects.get(email=email)
         if user.is_instructor:
             ta = TA.objects.filter(course_id=course_id).all()
-            return render(request, 'TA-list.html', {'ta': ta})
+            course = Course.objects.get(id=course_id)
+            return render(request, 'TA-list.html', {'ta': ta, 'course': course})
         return redirect('error404')
     except Exception as e:
         print(e)     
