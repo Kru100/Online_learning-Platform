@@ -135,15 +135,15 @@
         
 
                   <div class="star-widget mb-5" style="width: 155px;">          
-                    <input type="radio" name="rate" id="rate-5" value="5">
+                    <input type="radio" name="rate" id="rate-5" value="5" required>
                     <label for="rate-5" class="fa-solid fa-star"> </label>
-                    <input type="radio" name="rate" id="rate-4" value="4">
+                    <input type="radio" name="rate" id="rate-4" value="4" required>
                     <label for="rate-4" class="fa-solid fa-star"> </label>
-                    <input type="radio" name="rate" id="rate-3" value="3">
+                    <input type="radio" name="rate" id="rate-3" value="3" required>
                     <label for="rate-3" class="fa-solid fa-star"></label>
-                    <input type="radio" name="rate" id="rate-2" value="2">
+                    <input type="radio" name="rate" id="rate-2" value="2" required>
                     <label for="rate-2"  class="fa-solid fa-star"> </label>
-                    <input type="radio" name="rate" id="rate-1" value="1">
+                    <input type="radio" name="rate" id="rate-1" value="1" required>
                     <label for="rate-1" class="fa-solid fa-star"> </label>
         
                 </div>
@@ -152,7 +152,7 @@
           
                 <div class="form-group my-3">
                   <label for="exampleFormControlTextarea1" class="fs-4 fw-semibold"> Write review </label>
-                 <textarea class="form-control placeholder-1" id="exampleFormControlTextarea1" rows="5" name="feedback" placeholder="Content"></textarea>
+                 <textarea class="form-control placeholder-1" id="exampleFormControlTextarea1" rows="5" name="feedback" placeholder="Content" required></textarea>
               </div>
         
         
@@ -178,10 +178,10 @@
         <div class="col-6">
 
 
-           <h1 class="fs-4 fw-semibold"> {{ feed.user_name }}</h1>
+           <h1 class="fs-5 fw-normal"> {{ feed.user_name }}</h1>
 
-           <h1 class="fs-4 fw-semibold"> {{ feed.star  }} <i class="fa-solid fa-star" style="color: #e59819;"></i></h1>
-          <h1 class="fs-4 fw-semibold"> {{ feed.feedback }} </h1>
+           <h1 class="fs-5 fw-normal"> {{ feed.star  }} <i class="fa-solid fa-star" style="color: #e59819;"></i></h1>
+          <h1 class="fs-5 fw-normal"> {{ feed.feedback }} </h1>
 
         </div>
 

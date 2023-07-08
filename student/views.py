@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from authent.views import *
 from django.core.paginator import Paginator
 from conversation.models import *
-
+import json
+from datetime import datetime
 
 # Create your views here.
 
@@ -39,14 +40,58 @@ def search_course(request):
 # Combine the two lists
       results = instructors_courses_list + allcourse + alldescription
       results = set(results)
+
+      results_list = [
+     {
+        'id' : res.id,
+        'name': res.name,
+        'instructor_name': res.instructor_name,
+        'description': res.description,
+        'rating': res.rating,
+        'price': res.price,
+        'rated' : res.rated,
+        'created_at': res.created_at.strftime('%d %B, %Y').lstrip('0'),
+        'time_needed' : res.time_needed,
+        # Add other relevant fields
+     }
+     for res in results
+     ]
+      request.session['search_results'] = results_list
+      sort_by = ""
       
 # If you want to remove duplicates, you can convert the list to a set and then back to a list 
       context = {
         'results' : results,
-     
+        'sort_by' : sort_by,
        }
 
       return render(request,'search.html',context)
+
+def search_filter(request):
+    
+    results = request.session.get('search_results')
+    sort_by = request.GET['sort']
+    print(sort_by)
+
+    if sort_by == 'reviewed':
+       results.sort(key=lambda x: x['rated'], reverse=True)
+    elif sort_by == 'rated':
+       results.sort(key=lambda x: x['rating'], reverse=True)
+    elif sort_by == 'price':
+       results.sort(key=lambda x: x['price'], reverse=True)
+    elif sort_by == 'newest':
+       results.sort(key=lambda x: datetime.strptime(x['created_at'], '%d %B, %Y'), reverse=True)
+
+      
+
+    context = {
+         'results' : results,
+         'sort_by' : sort_by,
+    }
+
+    return render(request,'search.html',context)
+
+
 
 def course_single(request,course_id):
     
@@ -210,12 +255,25 @@ def student_feedback(request,course_id):
        rating = request.POST.get('rate')
        feed = request.POST.get('feedback')
        user = User.objects.get(email=user_email)
-
+       course = Course.objects.get(id=course_id)
 
        feedback_user = Feedback(course_id=course_id,email=user_email,user_name=user.name,feedback=feed,star=rating)
-
        feedback_user.save()
-       return redirect(reverse('course-single',kwargs={'course_id': course_id}))
+
+       all_feedback = Feedback.objects.filter(course_id=course_id).values('star')
+       total_star = sum(feedback['star'] for feedback in all_feedback)
+      
+       feedback_count = all_feedback.count()
+      
+       avg = total_star/feedback_count
+     
+       rounded_avg = round(avg, 1)
+
+       course.rating = rounded_avg
+       course.rated = feedback_count
+       course.save()
+           
+     return redirect(reverse('course-single',kwargs={'course_id': course_id}))
      
 
  
