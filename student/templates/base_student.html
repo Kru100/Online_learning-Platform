@@ -13,30 +13,25 @@
      
         <nav class="navbar navbar-expand-lg bg-dark-subtle">
             <div class="container-fluid">
-              <a class="navbar-brand" href="#">Navbar</a>
+              <a class="navbar-brand" href="{% url 'home2' %}">Navbar</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto ">
 
+                
                   {% if request.session.email %}
                   <li class="nav-item me-4 fs-5">
-                    <a class="nav-link active" aria-current="page" href="{% url 'indexpage' %}">Home</a>
-                  </li>
-                  {% else %}
-                  <li class="nav-item me-4 fs-5">
-                    <a class="nav-link active" aria-current="page" href="{% url 'home2' %}">Home</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'course-list-TA' %}">TAship</a>
                   </li>
                   {% endif %}
+
                   {% if request.session.email %}
                   <li class="nav-item me-4 fs-5">
-                    <a class="nav-link active" aria-current="page" href="{% url 'course-list-TA' %}">TAship</a>
+                    <a class="nav-link" href="{% url 'indexpage' %}"> My Courses </a>
                   </li>
-                  {% endif %}
-                  <li class="nav-item me-4 fs-5">
-                    <a class="nav-link" href="{% url 'home2' %}"> Course </a>
-                  </li>
+                 {% endif %}
 
                   <li class="nav-item me-4 fs-5 mb-md-0 mt-md-1">
                    
