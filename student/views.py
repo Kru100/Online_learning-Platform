@@ -78,7 +78,7 @@ def search_filter(request):
     elif sort_by == 'rated':
        results.sort(key=lambda x: x['rating'], reverse=True)
     elif sort_by == 'price':
-       results.sort(key=lambda x: x['price'], reverse=True)
+       results.sort(key=lambda x: x['price'], reverse=False)
     elif sort_by == 'newest':
        results.sort(key=lambda x: datetime.strptime(x['created_at'], '%d %B, %Y'), reverse=True)
 
