@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	<title> course add form </title>
+  	<title> Add Course </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -11,6 +11,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 		<link rel="stylesheet" href="{% static 'css/style.css' %}">
         <link rel="stylesheet" href="{% static 'courseadd.css' %}">
+        <script>
+          function startCountdown() {
+            console.log("startCountdown function called");
+            var countdownTime = 5; // 5 seconds
+          
+            var countdownInterval = setInterval(function() {
+              countdownTime--;
+          
+              if (countdownTime < 0) {
+                clearInterval(countdownInterval);
+                var messageElement = document.querySelector('.alert.alert-primary');
+                if (messageElement) {
+                  messageElement.remove();
+                }
+              }
+            }, 1000); // Update countdown every second
+          
+            return countdownInterval; // Return the interval reference
+          }
+          
+          window.onload = function() {
+            startCountdown();
+          };
+        </script>
   </head>
   <body>
 		{% if messages %}
@@ -43,7 +67,7 @@
             <a href=""><span class="fa-solid fa-plus mr-3"> </span> Add Course</a>
           </li>
           <li>
-            <a href="#"><span class="fa-solid fa-chart-simple mr-3"></span> Performance </a>
+            <a href="{% url 'notification' %}"><span class="fa-solid fa-bell mr-3"></span> Notifications </a>
           </li>
           <li>
             <a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket  mr-3"></span> Logout </a>
@@ -117,5 +141,6 @@
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/timer.js"></script>
   </body>
 </html>
