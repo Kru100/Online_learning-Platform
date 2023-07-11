@@ -276,7 +276,8 @@ def student_feedback(request,course_id):
            
      return redirect(reverse('course-single',kwargs={'course_id': course_id}))
      
-
+def cheated(request):
+   return render(request, 'cheated.html')
  
 
 
