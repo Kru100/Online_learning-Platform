@@ -1,6 +1,8 @@
 {% extends 'base_student.html' %}
 
 {% load static %}
+
+{% block body %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,64 +11,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-   <link rel="stylesheet" href="{% static 'dropdown.css' %}">
-    <title>Document</title>
+    <title>Search results </title>
+    <link rel="stylesheet" href="{% static 'search.css' %}">
 </head>
 
 <body>
 
-  {% block body %}
 
-
-  <h1> search results : {{ query }} </h1>
-
+<div class="container">
+  
   {% if results %}
 
-  <form method="GET" action="{% url 'search_filter' %}">
-    <!-- Existing filters -->
-    
-    <!-- New filters -->
-    <select name="sort" id="sort" class="mb-3">
-        <option value="most_relevent" {% if sort_by == '' %}selected{% endif %}>Most Relevant</option>
-        <option value="reviewed" {% if sort_by == 'reviewed' %} selected {% endif %}>Most Reviewed</option>
-        <option value="rated" {% if sort_by == 'rated' %}selected{% endif %}> Highest Rated</option>
-        <option value="price" {% if sort_by == 'price' %}selected{% endif %}> price </option>
-        <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}> newest </option>
-    </select>
+  
+    <div class="ms-5 pt-3">
+      <h2 class="fs-4"> Search results: </h2>
 
-    
-    <button type="submit" class="btn btn-danger">Filter</button>
-</form>
-
-
-
-  {% for res in results %}
-
-
-  <div class="card ms-3 w-25 mb-3">
-    <div class="card-header">
-      Course - {{ res.name }}
     </div>
-    <div class="card-body">
-      <h5 class="card-title"> Instructor - {{ res.instructor_name }} </h5>
-      <p class="card-text"> Details - {{ res.description }} </p>
-      <p class="card-text"> rating - {{ res.rating }} <i class="fa-solid fa-star" style="color: #e59819;"></i> </p>
-      <p class="card-text"> rated - {{ res.rated }} </p>
-      <p class="card-text"> date - {{ res.created_at }} </p>
-      <a href="{% url 'course-single' res.id %}" class="btn btn-primary stretched-link">Price - {{ res.price }}</a>
-    </div>
-  </div>
 
-  {% endfor %}
+    {% for res in results %}
+
+    <div class="row d-flex justify-content-between p-2">
+        <div class="col-4 pt-2">
+
+          {% if forloop.counter == 1 %}
+          <form method="GET" id="myForm" action="{% url 'search_filter' %}">
+            <div class="select-box">
+                <div class="select-box__current" tabindex="1" >
+                    <div class="select-box__value">
+          <input class="select-box__input" type="radio" id="0" value="most_relevent" name="sort" onclick="submitForm()" checked="checked"/>
+                        <p class="select-box__input-text"> 
+                           {% if sort_by == 'reviewed' %}
+                           Most Reviewed
+                           {% elif sort_by == 'rated' %}
+                           Highest Rated
+                           {% elif sort_by == 'price' %}
+                           Price
+                           {% elif sort_by == 'newest' %}
+                           Newest
+                           {% else %}
+                           Most Relevent 
+                           {% endif %}
+                        </p>
+                      </div>
+                  <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="1" value="reviewed" name="sort" onclick="submitForm()">
+                    <p class="select-box__input-text"> Most Reviewed </p>
+                  </div>
+                  <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="2" value="rated" name="sort" onclick="submitForm()"/>
+                    <p class="select-box__input-text"> Highest rated  </p>
+                  </div>
+                  <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="3" value="price" name="sort" onclick="submitForm()"/>
+                    <p class="select-box__input-text"> Price </p>
+                  </div>
+                  <div class="select-box__value">
+                    <input class="select-box__input" type="radio" id="4" value="newest" name="sort" onclick="submitForm()" />
+                    <p class="select-box__input-text"> Newest </p>
+                  </div><img class="select-box__icon" src="http://cdn.onlinewebfonts.com/svg/img_295694.svg" alt="Arrow Icon" aria-hidden="true"/>
+                </div>
+                <ul class="select-box__list">
+                    <li>
+                   <label class="select-box__option" for="0" aria-hidden="aria-hidden">Most Relevent </label>
+                      </li>
+                  <li>
+                    <label class="select-box__option" for="1" aria-hidden="aria-hidden"> Most Reviewed </label>
+                  </li>
+                  <li>
+                    <label class="select-box__option" for="2" aria-hidden="aria-hidden"> Highest Rated </label>
+                  </li>
+                  <li>
+                    <label class="select-box__option" for="3" aria-hidden="aria-hidden">Price</label>
+                  </li>
+                  <li>
+                    <label class="select-box__option" for="4" aria-hidden="aria-hidden">Newest</label>
+                  </li>
+                  
+                </ul>
+              </div>
+          
+          </form>
+          {% endif %}
+         
+        </div>
+       
+        <div class="col-7" style="position: relative;">
+
+            <div class="row my-2">
+                <div class="col-6">
+                    <img src="{% static 'images/product-23.jpg' %}" style="height: 160px;">
+
+                </div>
+                <div class="col-6">
+                    <h3 class="fs-4 fw-semibold"> {{ res.name }} </h3>
+                    <h3 class="fs-6 fw-normal"> Instructor Name - {{ res.instructor_name }}  </h3>
+                    <h3 class="fs-5 fw-normal"> Price - {{ res.price }}  </h3>
+                    <h3 class="fs-6 fw-normal"> {{ res.rating}}  <i class="fa-solid fa-star" style="color: #e59819;"></i><span class="fs-6"> ({{res.rated}}) </span></h3>
+                   <h3 class="fs-6 fw-semibold" style="color: rgba(175, 174, 174, 0.861);"> Total Hours - 25 / All levels  </h3>
+                    <h3 class="fs-6 fw-medium"> {{ res.created_at }} </h3>
+                   <a href="{% url 'course-single' res.id %}" class="stretched-link"> </a>
+                  </div>
+              
+          </div>
+       
+          <hr>
+        </div>
+
+    </div>
+
+    {% endfor %}
 
   {% else %}
 
-  <h1> no results found !! please write spelling correctly. </h1>
+   <div class="mt-4">
+    <h2 class="fs-4"> Search results: </h2>
+  <h2 class="fs-4 fw-normal"> no results found !! please write spelling correctly. </h2>
+   </div>
+
 
   {% endif %}
+ 
+
+  </div>
+
+
+
+
+  <script>
+    function submitForm() {
+      document.getElementById("myForm").submit();
+    }
+  </script>
 
   {% endblock %}
 
+
+</div>
 </body>
 
 </html>
