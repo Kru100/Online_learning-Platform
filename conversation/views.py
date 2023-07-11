@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from authent.views import *
 from instructor.urls import *
+from collections import defaultdict
 
 @custom_login_required
 def anounce_home(request, course_id):
@@ -44,7 +45,7 @@ def make_announcement(request, course_id):
                 for user in course.enrolled.all():
                     Notifications.objects.create(student=user.id, course_id=course_id, text=f'New Notification in {course.name}')
                 return redirect(reverse('annoucement', kwargs={'course_id': course_id}))
-            return render(request, 'make-anouncement.html')
+            return render(request, 'make-anouncement.html', {'user': user, 'ta': ta})
         return redirect('error404/')
     except Exception as e:
         print(e)
@@ -62,7 +63,8 @@ def ask_doubt(request, course_id):
             Notifications.objects.create(student=user.id, course_id=course_id, text=f'Someone had doubt in {n.name}')
             messages.add_message(request, messages.INFO,"Doubt Posted Successfully")
             return redirect(reverse('student-doubt', kwargs={'course_id': course_id}))
-        return render(request,'ask-doubt.html')
+        course = Course.objects.get(id=course_id)
+        return render(request,'ask-doubt.html', {'course': course})
     except Exception as e:
         print(e)
 
@@ -87,7 +89,7 @@ def reply_doubt(request, course_id, ask_id):
                 dbs.save()
                 messages.add_message(request, messages.INFO,"Replied Successfully")
                 return redirect(reverse('instructor-doubt', kwargs={'course_id': course_id})) 
-            return render(request,'reply.html')   
+            return render(request,'reply.html', {'user': user, 'ta': ta})   
         return redirect('error404/')        
     except Exception as e:
         print(e)
@@ -100,7 +102,15 @@ def doubtboard_instructor(request, course_id):
         ta = TA.objects.filter(email=email, course_id=course_id).first()
         if user.is_instructor == True or ta != None:
             db = Doubt_ask.objects.filter(course_id=course_id).all()
-            return render(request,'doubtboard_instructor.html', {'db': db, 'user': user, 'ta': ta})
+            d = Doubt_replied.objects.filter(course_id=course_id).all()
+            d_total = db.count()
+            d_rep = d.count()
+            d_not = d_total - d_rep
+            sender_count = defaultdict(int)
+            for i in d:
+                sender_count[i.receiver] += 1
+            print(sender_count)
+            return render(request,'doubtboard_instructor.html', {'db': db, 'user': user, 'ta': ta, 'dt': d_rep, 'd': d_total, 'dn': d_not, 'sender_counts': sender_count.items()})
     except Exception as e:
         print(e)
 
@@ -202,7 +212,7 @@ def notification(request):
         notify = Notifications.objects.filter(student=user.id).all().order_by('-id')
         notify_ids = [n.id for n in notify if not n.is_viewed]
         Notifications.objects.filter(id__in=notify_ids).update(is_viewed=True)
-        context = {'notify': notify}
+        context = {'notify': notify, 'user': user}
         # for n in notify:
         #     n.is_viewed = True
         #     n.save()

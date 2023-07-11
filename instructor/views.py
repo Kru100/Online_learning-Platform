@@ -103,6 +103,7 @@ def createQuiz(request, course_id):
                     'quiz' : quiz,
                     'course' : course,
                     'user':user,
+                    'ta' : ta,
                 }
             return render(request,'coursehome.html',context)
         return redirect('error404')
@@ -150,7 +151,9 @@ def quiz_show(request,course_id,quiz_id):
         if user.is_instructor == True or ta != None:
             quizz = Quiz.objects.filter(quiz_id=quiz_id).all()  
             context = {            
-                'quiz' : quizz,           
+                'quiz' : quizz,  
+                'user' : user,
+                'ta' : ta,         
             }
             return render(request, 'quiz_show.html',context)  
         return redirect('error404')  
@@ -173,7 +176,8 @@ def video_upload(request, course_id):
                 messages.add_message(request, messages.INFO, "Video saved successfully.")
                 return redirect(reverse('video_upload', kwargs={'course_id': course_id,}))
             vid = Video.objects.filter(course_id=course_id)
-            return render(request, 'upload.html', {'vid':vid, 'user':user})
+            course = Course.objects.get(id=course_id)
+            return render(request, 'upload.html', {'vid':vid, 'user':user, 'ta' : ta, 'course':course})
         return redirect('error404')
     except Exception as e:
         print(e)
@@ -187,7 +191,9 @@ def edit_question(request,course_id,quiz_id,id):
         if user.is_instructor == True or ta != None:
             quizz = Quiz.objects.get(id=id)
             context = {
-                 'quizz' : quizz
+                 'quizz' : quizz,
+                 'user' : user,
+                 'ta' : ta,
             }
             return render(request,'update.html',context)
         return redirect('error404')
@@ -221,7 +227,7 @@ def update_question(request,course_id,quiz_id,id):
                 quizz.save()
                 messages.add_message(request, messages.INFO, "Question updated successfully !!")
                 return redirect(reverse('quiz_show',kwargs={'quiz_id': quiz_id}))
-            return render(request,'update.html')
+            return render(request,'update.html', {'user': user, 'ta' : ta})
         return redirect('error404')
     except Exception as e:
         print(e)
@@ -251,7 +257,7 @@ def courseHome(request, course_id):
             enrolled_users = course.enrolled.all()
             context = {
                 'course': course,
-                'enrolled_users': enrolled_users
+                'enrolled_users': enrolled_users,
             }
             if ta != None:
                 if ta.is_TA == True:
