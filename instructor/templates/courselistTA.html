@@ -1,3 +1,5 @@
+{% extends 'base_student.html' %}
+{% block body %}
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -13,40 +15,6 @@
         <link rel="stylesheet" href="{% static 'courselist.css' %}">
   </head>
   <body>
-		
-		<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar">
-				<div class="custom-menu">
-					<button type="button" id="sidebarCollapse" class="btn btn-primary">
-	          <i class="fa fa-bars"></i>
-	          <span class="sr-only">Toggle Menu</span>
-	        </button>
-        </div>
-	  		<h1><a href="index.html" class="logo">Nav Bar </a></h1>
-        <ul class="list-unstyled components mb-5">
-          <li>
-            <a href="{% url 'home' %}"><span class="fa fa-home mr-3"></span> Homepage</a>
-          </li>
-          <li  class="active">
-              <a href="#"><span class="fa-brands fa-youtube mr-3"> </span> Course</a>
-          </li>
-
-          <li>
-            <a href="{% url 'add-course' %}"><span class="fa-solid fa-plus mr-3"> </span> Add Course</a>
-          </li>
-          <li>
-            <a href="#"><span class="fa-solid fa-chart-simple mr-3"></span> Performance </a>
-          </li>
-          <li>
-            <a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket  mr-3"></span> Logout </a>
-          </li>
-          <li>
-            <a href="#"><span class="fa fa-paper-plane mr-3"></span> Information</a>
-          </li>
-        </ul>
-
-    	</nav>
-
         <!-- Page Content  -->
       <div id="content" class="p-4 p-md-5 pt-5">
  
@@ -82,3 +50,4 @@
     <script src="js/main.js"></script>
   </body>
 </html>
+{% endblock %}

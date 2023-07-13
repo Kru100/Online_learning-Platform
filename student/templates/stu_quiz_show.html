@@ -40,11 +40,17 @@
       window.onload = function() {
         startCountdown();
       };
-  
-    </script>
-  </head>
+      
+      //prevention from tab change and detection of tab change.
 
-  
+      document.addEventListener("visibilitychange", function() {
+        if (document.hidden){
+          // The tab has been changed, redirect to the result page
+          window.location.href = "/cheated";
+        }
+      });
+    </script>
+  </head> 
 
   <body>
     <h3 class="text text-center">You have this much:<span id="countdown"></span></h3>
