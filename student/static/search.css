@@ -1,3 +1,6 @@
+.select-box__input:checked + .select-box__input-text {
+  background-color: #f2f4f5;
+}
 
 .select-box {
   position: relative;
@@ -15,6 +18,7 @@
   cursor: pointer;
   outline: none;
 }
+
 .select-box__current:focus + .select-box__list {
   opacity: 1;
   -webkit-animation-name: none;
@@ -40,7 +44,6 @@
 }
 .select-box__input {
   display: none;
-  
 }
 .select-box__input:checked + .select-box__input-text {
   display: block;
@@ -78,10 +81,6 @@
 .select-box__option:hover, .select-box__option:focus {
   color: #546c84;
   background-color: #e4eff8;
-}
-
-.select-box__input:checked + .select-box__input-text {
-  background-color: black;
 }
 
 
