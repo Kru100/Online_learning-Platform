@@ -1,4 +1,5 @@
 from djongo import models
+from django.utils import timezone
 #from authent.models import *
 
 class User(models.Model):
@@ -30,6 +31,7 @@ class TA(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length=100)
     instructor = models.EmailField()
+    file = models.ImageField(upload_to='QR/', default=None)
     instructor_name = models.CharField(max_length=100 ,default=None)
     description = models.CharField(max_length=250, default = None)
     time_needed = models.CharField(max_length=100, default=None)
@@ -66,6 +68,12 @@ class Video(models.Model):
     video_title = models.CharField(max_length=100)
     video_description = models.CharField(max_length=500)
     file = models.FileField(upload_to='videos/%y')  
-    objects = models.DjongoManager()      
-
+    objects = models.DjongoManager()     
     
+class Payment(models.Model):
+    course_id = models.IntegerField()
+    user_id = models.IntegerField()
+    payment_id = models.CharField(max_length=150)
+    is_done = models.BooleanField(default=False)
+    date_of_pay = models.DateField(blank=True, default=timezone.now)
+    objects = models.DjongoManager()        

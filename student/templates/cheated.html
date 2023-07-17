@@ -1,1 +1,33 @@
-<h5> You can't be cheat on this website.</h5>
+{% extends 'base_student.html' %}
+<head>
+    <script type="text/javascript">
+        function startCountdown() {
+            console.log("startCountdown function called");
+            var countdownElement = document.getElementById('countdown');
+            var countdownTime = 5; 
+      
+            var countdownInterval = setInterval(function() {
+              var seconds = countdownTime % 60;
+              countdownElement.innerHTML = 's';
+      
+              countdownTime--;
+      
+              if (countdownTime < 0) {
+                clearInterval(countdownInterval);
+                window.location.href = 'calculate-marks/{{quizi}}';
+              }
+            }, 1000);  // Update countdown every second
+      
+            return countdownInterval; // Return the interval reference
+          }
+          window.onload = function() {
+            startCountdown();
+          };
+      </script>
+</head>
+<body>
+    <div style="margin-left: 250px; margin-top: 200px;">
+<h1>You Can't Cheat Here, Remember it - </h1>
+<h1> <span id="countdown"></span></h1>
+    </div>
+</body>
