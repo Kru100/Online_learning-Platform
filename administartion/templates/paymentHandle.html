@@ -1,0 +1,26 @@
+{% extends 'base_admin.html' %}
+{% block body %}
+<head>
+    <title>Payment Handler</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />    
+</head>
+<body>
+    <h1>Payment Accepting</h1>
+        {% for item in data %}
+            {% with p=item.0 c=item.1 %}
+            <div class="card d-flex flex-row bd-highlight mb-3">
+                <div class="card-body">
+                    {% comment %} {% if !p.is_done %} {% endcomment %}
+                    <h4>UPI ID : {{ p.payment_id }} </h4>
+                    <h6>Course : {{ c.name }} </h6>
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'accept_payment' p.id %}" class="btn btn-success">Accept</a>
+                        <a href="{% url 'deny_payment' p.id %}" class="btn btn-danger">Deny</a>
+                    </div>
+                    {% comment %} {% endif %} {% endcomment %}
+                </div>
+            </div>
+            {% endwith %}
+        {% endfor %}
+</body>
+{% endblock %}

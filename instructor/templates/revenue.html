@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Graph</title>
+    <style>
+        .st : {
+            width: 600px;
+            height: 300px; 
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="st">
+    <canvas id="revenueChart" ></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels:[
+                    {% for item in data %}
+                        "{{ item.0 }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Revenue',
+                    data:[
+                    {% for item in data %}
+                        {{ item.1 }},
+                    {% endfor %}
+                ],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
