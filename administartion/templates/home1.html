@@ -1,1 +1,37 @@
-<h1>ADMIN : {{ request.session.email }} </h2>
+{% extends 'base_admin.html' %}
+{% block body %}
+<h1>ADMIN : {{ request.session.email }} </h1>
+
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Total Users</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">{{ total_user }}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Total Courses</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">{{ total_course }}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm border-primary">
+            <div class="card-header py-3 text-white bg-primary border-primary">
+              <h4 class="my-0 fw-normal">Total Revenue</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">{{ total_rev }}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endblock %}

@@ -22,7 +22,9 @@ urlpatterns = [
     path('TA-add/<int:course_id>', views.TA_add, name='TA-add'),
     path('TA-list/<int:course_id>', views.TA_list, name='TA-list'),
     path('delete-TA/<int:course_id>/<int:id>', views.delete_TA, name='delete-TA'),
-    path('course-list-TA', views.course_list_TA, name='course-list-TA')
+    path('course-list-TA', views.course_list_TA, name='course-list-TA'),
+    path('revenue', views.Revenue, name='revenue'),
+    path('payment/<int:course_id>', views.addPayment, name='payment'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

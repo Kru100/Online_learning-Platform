@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
-from instructor.models import *
+from instructor.models import * 
+from conversation.models import * 
+from django.http import HttpResponse
+from django.contrib import messages
+from authent.views import *
 
+@custom_login_required
 def printUser(request):
     try:
         email = request.session.get('email')
@@ -12,6 +17,7 @@ def printUser(request):
     except Exception as e:
         print(e)
 
+@custom_login_required
 def printInstructor(request):
     try:
         email = request.session.get('email')
@@ -23,6 +29,7 @@ def printInstructor(request):
     except Exception as e:
         print(e)
 
+@custom_login_required
 def printCourse(request):
     try:
         email = request.session.get('email')
@@ -33,16 +40,78 @@ def printCourse(request):
         return redirect('/error404')
     except Exception as e:
         print(e)
-        
+
+@custom_login_required        
 def admin(request):
     try:
         email = request.session.get('email')
         user = User.objects.filter(email=email).first()
         if user.is_admin:
-            return render(request, "home1.html")
+            courses = Course.objects.all()
+            total_rev = 0
+            for course in courses:
+                total_rev += (course.price * course.enrolled.count())
+            total_user = User.objects.all().count()
+            total_course = Course.objects.all().count()
+            context = {
+                'total_rev': total_rev,
+                'total_user': total_user,
+                'total_course': total_course
+            }
+            return render(request, "home1.html", context)
         return redirect('/error404')
     except Exception as e:
         print(e)
+
+@custom_login_required        
+def PaymentHandling(request, course_id):
+    try:
+        if request.method == 'POST':
+            email = request.session.get('email')
+            user = User.objects.get(email=email)
+            upi = request.POST.get('upi')
+            pay = Payment(course_id=course_id, user_id=user.id, payment_id = upi)
+            pay.save()
+            course = Course.objects.get(id=course_id)    
+            return render(request, "payment.html", {'course': course})
+        course = Course.objects.get(id=course_id)   
+        return render(request, "payment.html", {'course': course})
+    except Exception as e:
+        print(e)    
+
+@custom_login_required
+def PaymentAccept(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()
+        if user.is_admin:
+            pay = Payment.objects.all()
+            cnt = 0
+            data = []
+            for p in pay:
+                if p.is_done == False:
+                    cnt += 1
+                    c = Course.objects.get(id=p.course_id)
+                    data.append((p, c))               
+            return render(request, 'paymentHandle.html', {'cnt': cnt, 'data': data})
+        return redirect('/error404')
+    except Exception as e:
+        print(e) 
+
+@custom_login_required
+def accept_payment(request, payment_id):
+    payment = Payment.objects.get(id=payment_id)
+    Notifications.objects.create(course_id=payment.course_id, student=payment.user_id, text="Your Payment is accepted. You can access the course now.")
+    payment.is_done = True
+    payment.save()
+    return redirect('paymentHandler')
+
+@custom_login_required
+def deny_payment(request, payment_id):
+    payment = Payment.objects.get(id=payment_id)
+    Notifications.objects.create(course_id=payment.course_id, student=payment.user_id, text="Your Payment is declined. For query contact via Help.")
+    payment.delete()
+    return redirect('paymentHandler')  
 # Create your views here.
 # from django.shortcuts import render, get_object_or404
 # from django.http import HttpResponse

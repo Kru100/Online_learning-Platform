@@ -12,5 +12,5 @@ urlpatterns = [
     path('student-profile/',views.student_profile,name='student-profile'),
     path('rating/<int:course_id>/',views.student_feedback,name='student_feedback'),
     path('search/filter/',views.search_filter,name='search_filter'),
-    path('cheated/', views.cheated,name='cheated'),
+    path('cheated/<int:quiz_id>/', views.cheated,name='cheated'),
 ]

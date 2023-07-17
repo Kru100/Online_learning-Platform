@@ -374,3 +374,34 @@ def course_list_TA(request):
         return redirect('error404')
     except Exception as e:
         print(e)   
+
+@custom_login_required
+def Revenue(request):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()
+        if user.is_instructor:
+            courses = Course.objects.filter(instructor=email).all()
+            data = [(course.name, (course.price * course.enrolled.count()))for course in courses]
+            return render(request, "revenue.html", {'data': data})
+        return redirect('/error404')
+    except Exception as e:
+        print(e)
+        
+@custom_login_required
+def addPayment(request, course_id):
+    try:
+        email = request.session.get('email')
+        user = User.objects.filter(email=email).first()        
+        if user.is_instructor:
+            if request.method == 'POST':
+                course = Course.objects.get(id=course_id)
+                course.file = request.FILES.get('qr')
+                course.save()
+                messages.add_message(request, messages.INFO, 'Your Payment is now available.')
+                return render(request, 'addPayment.html', {'course': course})
+                #return redirect(reverse('course', kwargs={'course_id': course_id}))
+            return render(request, 'addPayment.html')
+        return redirect('/error404')
+    except Exception as e:
+        print(e)

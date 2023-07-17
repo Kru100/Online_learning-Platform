@@ -158,12 +158,12 @@ def student_quiz_show(request,course_id,quiz_id):
        
       
         quizz = list(Quiz.objects.filter(quiz_id=quiz_id))
-        q = Quiz_details.objects.get(id=quiz_id)
+      #   q = Quiz_details.objects.get(id=quiz_id)
         random.shuffle(quizz)
 
         context ={
         'quizs' : quizz,
-        'q' : q,
+        'quizi' : quiz_id,
        }
 
         return render(request,'stu_quiz_show.html',context)
@@ -276,8 +276,8 @@ def student_feedback(request,course_id):
            
      return redirect(reverse('course-single',kwargs={'course_id': course_id}))
      
-def cheated(request):
-   return render(request, 'cheated.html')
+def cheated(request, quiz_id):
+   return render(request, 'cheated.html', {'quiz_id': quiz_id})
  
 
 
