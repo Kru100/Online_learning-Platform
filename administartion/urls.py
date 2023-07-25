@@ -9,10 +9,10 @@ urlpatterns = [
     path('students/', views.printUser, name='students'),
     path('instructors/', views.printInstructor, name='instructors'),
     path('courses/', views.printCourse, name='courses'),
-    path('payments/<int:course_id>', views.PaymentHandling, name='payment'),
+    path('payments/<int:course_id>/', views.PaymentHandling, name='payment'),
     path('paymentsHandler/', views.PaymentAccept, name='paymentHandler'),
-    path('accept_payment/<int:payment_id>', views.accept_payment, name='accept_payment'),
-    path('deny_payment/<int:payment_id>', views.deny_payment, name='deny_payment')
+    path('accept_payment/<int:payment_id>/', views.accept_payment, name='accept_payment'),
+    path('deny_payment/<int:payment_id>/', views.deny_payment, name='deny_payment')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
