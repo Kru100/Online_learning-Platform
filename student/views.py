@@ -19,7 +19,14 @@ def indexpage(request):
 
     courses = user.enrolled_courses.all()
 
-    return render(request, 'home.html', {'user': user , 'courses' : courses})
+    notify = Notifications.objects.filter(student=user.id).all()
+    new_notifications = False
+    for n in notify:
+      if n.is_viewed == False:
+        new_notifications = True
+        break
+
+    return render(request, 'home.html', {'user': user , 'courses' : courses, 'new_notifications' : new_notifications})
 
 
 def search_course(request):
@@ -96,27 +103,33 @@ def search_filter(request):
 def course_single(request,course_id):
     
    try: 
-       course = Course.objects.get(id=course_id)
-       quiz = Quiz_details.objects.filter(course_id=course_id).all()
-       videos = Video.objects.filter(course_id=course_id).all()
-       enrolled_length = len(course.enrolled.all())
-       feedback = Feedback.objects.filter(course_id=course_id)
+      course = Course.objects.get(id=course_id)
+      quiz = Quiz_details.objects.filter(course_id=course_id).all()
+      videos = Video.objects.filter(course_id=course_id).all()
+      enrolled_length = len(course.enrolled.all())
+      feedback = Feedback.objects.filter(course_id=course_id)
+      notify = Notifications.objects.filter(student=user.id).all()
+      new_notifications = False
+      for n in notify:
+        if n.is_viewed == False:
+          new_notifications = True
+          break
 
       #  enroll = False
 
       #  if request.session.get('email'):
       #     enroll = course.enrolled.filter(email=request.session.email).exists()
 
-       context = {
-         'course' : course,
-          'quizs' : quiz,
-         'videos' : videos,
-         'length' : enrolled_length,
-         'feedback' : feedback,
-      #    'enrolled' : enroll,
-        }
+      context = {
+        'course' : course,
+        'quizs' : quiz,
+        'videos' : videos,
+        'length' : enrolled_length,
+        'feedback' : feedback,
+        'new_notifications' : new_notifications
+       }
 
-       return render(request,'course-single.html',context)
+      return render(request,'course-single.html',context)
     
    except Exception as e:
         print(e)
@@ -154,19 +167,22 @@ def enroll_student(request, course_id):
 
 def student_quiz_show(request,course_id,quiz_id):
     
-   try:
-       
-      
-        quizz = list(Quiz.objects.filter(quiz_id=quiz_id))
+   try:    
+      quizz = list(Quiz.objects.filter(quiz_id=quiz_id))
       #   q = Quiz_details.objects.get(id=quiz_id)
-        random.shuffle(quizz)
-
-        context ={
-        'quizs' : quizz,
-        'quizi' : quiz_id,
-       }
-
-        return render(request,'stu_quiz_show.html',context)
+      random.shuffle(quizz)
+      notify = Notifications.objects.filter(student=user.id).all()
+      new_notifications = False
+      for n in notify:
+        if n.is_viewed == False:
+          new_notifications = True
+          break
+      context ={
+      'quizs' : quizz,
+      'quizi' : quiz_id,
+      'new_notifications' : new_notifications,
+      }
+      return render(request,'stu_quiz_show.html',context)
           
    except Exception as e:
         print(e)
@@ -215,19 +231,23 @@ def calculate_marks(request,quiz_id):
 
 def videos_pagination(request,course_id):
     
-     videos = Video.objects.filter(course_id=course_id)
-     paginator = Paginator(videos, 1)  # 1 video per page
-
-     page_number = request.GET.get('page')  # Get the page number from the request's GET parameters
-     page_obj = paginator.get_page(page_number)  # Get the corresponding page object
-
-     context = {
-        'videos': page_obj,
-        'course_id' : course_id,
-        'videos2' : videos,
-     }
-
-     return render(request, 'videos.html', context)
+    videos = Video.objects.filter(course_id=course_id)
+    paginator = Paginator(videos, 1)  # 1 video per page
+    notify = Notifications.objects.filter(student=user.id).all()
+    new_notifications = False
+    for n in notify:
+      if n.is_viewed == False:
+        new_notifications = True
+        break
+    page_number = request.GET.get('page')  # Get the page number from the request's GET parameters
+    page_obj = paginator.get_page(page_number)  # Get the corresponding page object
+    context = {
+       'videos': page_obj,
+       'course_id' : course_id,
+       'videos2' : videos,
+       'new_notifications' : new_notifications,
+    }
+    return render(request, 'videos.html', context)
 
 def student_profile(request):
   try:
@@ -238,7 +258,7 @@ def student_profile(request):
     for n in notify:
       if n.is_viewed == False:
         new_notifications = True
-        break;
+        break
     context = {
         'user' : user,
         'new_notifications' : new_notifications,
