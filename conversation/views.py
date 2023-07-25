@@ -17,12 +17,18 @@ def anounce_home(request, course_id):
         course = Course.objects.get(id=course_id)
         context = {}
         ta = TA.objects.filter(email=email, course_id=course_id).first()
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if user.is_instructor == True:
             context = {'an': an, 'course': course, 'user': user}
         elif ta != None:
-            context = {'an': an, 'course': course, 'ta': ta}
+            context = {'an': an, 'course': course, 'ta': ta, 'new_notifications' : new_notifications}
         else:
-            context = {'an': an, 'course': course}
+            context = {'an': an, 'course': course, 'new_notifications' : new_notifications}
         return render(request, 'anouncement_home.html', context)
     except Exception as e:
         print(e)        
@@ -33,6 +39,12 @@ def make_announcement(request, course_id):
         email = request.session.get('email')
         user = User.objects.get(email=email)
         ta = TA.objects.filter(email=email, course_id=course_id)
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if user.is_instructor == True or ta != None:
             if request.method == 'POST':
                 sender = request.session.get('email')
@@ -45,7 +57,7 @@ def make_announcement(request, course_id):
                 for user in course.enrolled.all():
                     Notifications.objects.create(student=user.id, course_id=course_id, text=f'New Notification in {course.name}')
                 return redirect(reverse('annoucement', kwargs={'course_id': course_id}))
-            return render(request, 'make-anouncement.html', {'user': user, 'ta': ta})
+            return render(request, 'make-anouncement.html', {'user': user, 'ta': ta, 'new_notifications' : new_notifications})
         return redirect('error404/')
     except Exception as e:
         print(e)
@@ -53,6 +65,12 @@ def make_announcement(request, course_id):
 @custom_login_required
 def ask_doubt(request, course_id):
     try:
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if request.method == 'POST':
             email = request.session.get('email')
             doubt = request.POST.get('doubt')
@@ -64,7 +82,7 @@ def ask_doubt(request, course_id):
             messages.add_message(request, messages.INFO,"Doubt Posted Successfully")
             return redirect(reverse('student-doubt', kwargs={'course_id': course_id}))
         course = Course.objects.get(id=course_id)
-        return render(request,'ask-doubt.html', {'course': course})
+        return render(request,'ask-doubt.html', {'course': course, 'new_notifications': new_notifications})
     except Exception as e:
         print(e)
 
@@ -74,6 +92,12 @@ def reply_doubt(request, course_id, ask_id):
         email = request.session.get('email')
         user = User.objects.get(email=email)
         ta = TA.objects.filter(email=email, course_id=course_id).first()
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if user.is_instructor == True or ta.is_TA == True:
             if request.method == 'POST':
                 email = request.session.get('email')            
@@ -89,7 +113,7 @@ def reply_doubt(request, course_id, ask_id):
                 dbs.save()
                 messages.add_message(request, messages.INFO,"Replied Successfully")
                 return redirect(reverse('instructor-doubt', kwargs={'course_id': course_id})) 
-            return render(request,'reply.html', {'user': user, 'ta': ta})   
+            return render(request,'reply.html', {'user': user, 'ta': ta, 'new_notifications': new_notifications})   
         return redirect('error404/')        
     except Exception as e:
         print(e)
@@ -100,6 +124,12 @@ def doubtboard_instructor(request, course_id):
         email = request.session.get('email')
         user = User.objects.get(email=email)
         ta = TA.objects.filter(email=email, course_id=course_id).first()
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if user.is_instructor == True or ta != None:
             db = Doubt_ask.objects.filter(course_id=course_id).all()
             d = Doubt_replied.objects.filter(course_id=course_id).all()
@@ -110,7 +140,7 @@ def doubtboard_instructor(request, course_id):
             for i in d:
                 sender_count[i.receiver] += 1
             print(sender_count)
-            return render(request,'doubtboard_instructor.html', {'db': db, 'user': user, 'ta': ta, 'dt': d_rep, 'd': d_total, 'dn': d_not, 'sender_counts': sender_count.items()})
+            return render(request,'doubtboard_instructor.html', {'db': db, 'user': user, 'ta': ta, 'dt': d_rep, 'd': d_total, 'dn': d_not, 'sender_counts': sender_count.items(), 'new_notifications': new_notifications})
     except Exception as e:
         print(e)
 
@@ -119,17 +149,29 @@ def doubtboard_student(request, course_id):
     try:
         email = request.session.get('email')
         user = User.objects.get(email=email)
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if user.is_student == True:
             email = request.session.get('email')
             db = Doubt_ask.objects.filter(sender=email,course_id=course_id).all()
             dr = Doubt_replied.objects.filter(sender=email,course_id=course_id).all()
-            return render(request, 'doubtboard_student.html', { 'db' : db, 'dr' : dr})
+            return render(request, 'doubtboard_student.html', { 'db' : db, 'dr' : dr, 'new_notifications': new_notifications})
     except Exception as e:
         print(e)
 
 @custom_login_required
 def getHelp(request):
     try:
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
         if request.method == 'POST':
             email = request.session.get('email')
             helpline = request.POST.get('helpline')
@@ -137,13 +179,14 @@ def getHelp(request):
             helps.save()
             messages.add_message(request, messages.INFO, 'Your Query is being sent successfully!!')
             return render(request, 'gethelp.html')
-        return render(request, 'gethelp.html')
+        return render(request, 'gethelp.html', { 'new_notifications': new_notifications})
     except Exception as e:
         print(e)
 
 @custom_login_required
 def make_Feedback(request, course_id):
     try:
+        
         if request.method == 'POST':
             email = request.session.get('email')
             feedback = request.POST.get('feedback')
