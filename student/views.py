@@ -108,6 +108,8 @@ def course_single(request,course_id):
       videos = Video.objects.filter(course_id=course_id).all()
       enrolled_length = len(course.enrolled.all())
       feedback = Feedback.objects.filter(course_id=course_id)
+      email = request.session.get('email')
+      user = User.objects.get(email=email)
       notify = Notifications.objects.filter(student=user.id).all()
       new_notifications = False
       for n in notify:
@@ -171,6 +173,8 @@ def student_quiz_show(request,course_id,quiz_id):
       quizz = list(Quiz.objects.filter(quiz_id=quiz_id))
       #   q = Quiz_details.objects.get(id=quiz_id)
       random.shuffle(quizz)
+      email = request.session.get('email')
+      user = User.objects.get(email=email)
       notify = Notifications.objects.filter(student=user.id).all()
       new_notifications = False
       for n in notify:
@@ -233,6 +237,8 @@ def videos_pagination(request,course_id):
     
     videos = Video.objects.filter(course_id=course_id)
     paginator = Paginator(videos, 1)  # 1 video per page
+    email = request.session.get('email')
+    user = User.objects.get(email=email)
     notify = Notifications.objects.filter(student=user.id).all()
     new_notifications = False
     for n in notify:
