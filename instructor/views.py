@@ -5,6 +5,7 @@ from django.urls import reverse
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from authent.views import *
+from conversation.models import *
 
 @custom_login_required
 def home(request):
@@ -405,3 +406,41 @@ def addPayment(request, course_id):
         return redirect('/error404')
     except Exception as e:
         print(e)
+
+def rating_show(request,course_id):
+
+    feed = Feedback.objects.filter(course_id=course_id)
+    course = Course.objects.get(id=course_id)
+
+    feedback_data_list = list(feed.values())
+
+    request.session['feedback'] = feedback_data_list
+
+    rate = 0
+    
+    context = {
+        'feedbacks' : feed,
+        'course' : course,
+        'rate' : rate
+    }
+
+    return render(request,'rating_show.html',context)
+
+def search_rating(request,course_id):
+
+    rate = request.GET['rate']
+
+    print(rate)
+
+    feedback = Feedback.objects.filter(course_id=course_id,star = rate)
+
+
+    course = Course.objects.get(id=course_id)
+    
+    context = {
+       'feedbacks' : feedback,
+       'course' : course,
+       'rate' : rate
+    }
+
+    return render(request,'rating_show.html',context)

@@ -65,6 +65,7 @@
         <strong>Time Needed: </strong><p>{{ c.time_needed }}</p>
         <strong>Created At: </strong><p>{{ c.created_at }}</p>
         <a href="{% url 'course' c.id %}"><button class="btn btn-primary">Go to Course</button></a> 
+        <a href="{% url 'rating_show' c.id %}"> <button class="btn btn-danger"> Show reviews </button> </a>
       </div>
     </div>
   </div>

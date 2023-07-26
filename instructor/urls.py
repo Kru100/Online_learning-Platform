@@ -25,6 +25,8 @@ urlpatterns = [
     path('course-list-TA', views.course_list_TA, name='course-list-TA'),
     path('revenue', views.Revenue, name='revenue'),
     path('payment/<int:course_id>', views.addPayment, name='payment'),
+    path('show_rating/<int:course_id>/',views.rating_show,name='rating_show'),
+    path('rate_filter/<int:course_id>/',views.search_rating,name='rate_filter'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
