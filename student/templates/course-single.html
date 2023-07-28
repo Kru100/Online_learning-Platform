@@ -10,18 +10,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>course-single.html </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title> course-single.html </title>
     <link rel="stylesheet" href="{% static 'feedback.css' %}">
-   <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-    .stars {
-      color: yellow;
-    }
-
-   </style>
+   
   </head>
   <body>
 
@@ -45,7 +36,7 @@
                    {{ course.description }}
                 </h1>
 
-                <a class="btn btn-info mt-3" href="{% url 'video-pagination' course.id %}"> get started </a>
+              
     
             </div>
     
@@ -59,9 +50,16 @@
                  
               {% if request.session.email %}
           
+              {% if course in user.enrolled_courses.all %}
             
-              <a href="{% url 'enrollment' course.id %}" class="btn btn-danger mb-3"> Buy Now </a>
-        
+              <a href="{% url 'video-pagination' course.id %}" class="btn btn-danger mb-3 fw-normal">  Go to course </a>
+         
+              {% else %}
+
+              <a href="{% url 'payment' course.id %}" class="btn btn-danger mb-3 fw-normal">  Buy Now </a>
+
+              {% endif %}
+
                {% else %}
 
               <a href="{% url 'login' %}" class="btn btn-danger mb-3">Enroll me</a>
@@ -88,6 +86,8 @@
     
         </div>
 
+      
+
         <div class="row">
 
           <div class="col">
@@ -96,7 +96,7 @@
 
 
              <div class="border p-4 bg-white" style="position: relative;">
-                <a class="fs-5 fw-semibold text-black text-decoration-none stretched-link" href="{% url 'student_quiz_show' quiz.course_id quiz.id %}">  {{ quiz.quiz_name }} </a>
+                <a class="fs-5 fw-semibold text-black text-decoration-none stretched-link">  {{ quiz.quiz_name }} </a>
              </div>
            
           
@@ -118,10 +118,15 @@
 
         </div>
 
+        
         {% if request.session.email %}
         <div class="row p-4">
+
+          {% if course in user.enrolled_courses.all %}
           <div class="col-6 p-4 border d-flex flex-column">
       
+         
+
             <form method="POST" action="{% url 'student_feedback' course.id %}">
 
               {% csrf_token %}
@@ -164,21 +169,22 @@
             </form>
         
         
-        
-        
         </div>
+        {% endif %}
 
         </div>
         {% endif %}
 
         {% if feedback %}
 
+        <h1 class="fs-4 fw-semibold">Course Reviews : </h1>
+
         {% for feed in feedback %}
  
         <div class="col-6">
 
 
-           <h1 class="fs-5 fw-normal"> {{ feed.user_name }}</h1>
+           <h1 class="fs-5 fw-semibold"> @{{ feed.user_name }}</h1>
 
            <h1 class="fs-5 fw-normal"> {{ feed.star  }} <i class="fa-solid fa-star" style="color: #e59819;"></i></h1>
           <h1 class="fs-5 fw-normal"> {{ feed.feedback }} </h1>

@@ -108,14 +108,16 @@ def course_single(request,course_id):
       videos = Video.objects.filter(course_id=course_id).all()
       enrolled_length = len(course.enrolled.all())
       feedback = Feedback.objects.filter(course_id=course_id)
-      email = request.session.get('email')
-      user = User.objects.get(email=email)
-      notify = Notifications.objects.filter(student=user.id).all()
-      new_notifications = False
-      for n in notify:
-        if n.is_viewed == False:
-          new_notifications = True
-          break
+      
+      if 'email' in request.session:
+        email = request.session.get('email')
+        user = User.objects.get(email=email)
+        notify = Notifications.objects.filter(student=user.id).all()
+        new_notifications = False
+        for n in notify:
+          if n.is_viewed == False:
+            new_notifications = True
+            break
 
       #  enroll = False
 
@@ -128,8 +130,11 @@ def course_single(request,course_id):
         'videos' : videos,
         'length' : enrolled_length,
         'feedback' : feedback,
-        'new_notifications' : new_notifications
        }
+      
+      if 'email' in request.session:
+         context['new_notifications'] =  new_notifications
+         context['user'] = user
 
       return render(request,'course-single.html',context)
     

@@ -104,6 +104,10 @@ def accept_payment(request, payment_id):
     Notifications.objects.create(course_id=payment.course_id, student=payment.user_id, text="Your Payment is accepted. You can access the course now.")
     payment.is_done = True
     payment.save()
+    course = Course.objects.get(id=payment.course_id)
+    user = User.objects.get(id=payment.user_id)
+    course.enrolled.add(user)
+    user.enrolled_courses.add(course)
     return redirect('paymentHandler')
 
 @custom_login_required

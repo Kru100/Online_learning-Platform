@@ -1,6 +1,9 @@
 {% extends 'base_student.html' %}
 {% block body %}
 {% load static %}
+
+
+
 {% if messages %}
       <div class="alert alert-primary mt-2" role="alert">
         <ul class="messages">
@@ -11,27 +14,34 @@
       </div>
 {% endif %}
 
-<h1 class="text text-center">Payment</h1>
-<p class="text text-center">Scan the QR code below to make a payment:</p>
-<div class="d-flex justify-content-center">
-<form method="POST">
-  {% csrf_token %}
-  <label> Enter the UPI ID : </label>
-  <input type="text" name="upi" class="form-control"  autocomplete="__away" required>
-  <button type="submit" class="btn btn-block btn-primary2 fw-semibold text-uppercase" value="insert"> Pay </button>
-</form>
-</div>
-<div class="d-flex justify-content-center">
-<img src="{{ course.file.url }}" alt="Combined QR Code" style="width: 250px;">
-<img src="{% static 'images/admin.png' %}" alt="Combined QR Code" style="width: 250px;">
-</div>
-<div>
-  <ul class="text text-center"><b>Read Befor Payment</b>
-    <li class="text text-center">The user must add UPI ID at the payment.</li>
-    <li class="text text-center">The user must confirm and check the total amount while payment.</li>
-    <li class="text text-center">Payment amount must be equal to the course's price shown here.</li>
-    <li class="text text-center">After Payment it will be verified and you'll be able to access the course within 24 hours after payment.</li>
-    <li class="text text-center">Contact for defficulties faced by you by the get help button.</li>
-  </ul>
+<div class="container-fluid bg-light mb-3 pt-3">
+
+  <div class="d-flex justify-content-center mb-3">
+  
+  
+    <ul class="text"><b class="fs-4 fw-bold" style="color: #dc3545;">Read Before Payment !!!</b>
+      <li class="text">The user must add UPI ID at the payment.</li>
+      <li class="text">The user must confirm and check the total amount while payment.</li>
+      <li class="text">Payment amount must be equal to the course's price shown here.</li>
+      <li class="text">After Payment it will be verified and you'll be able to access the course within 24 hours after payment.</li>
+      <li class="text">Contact for defficulties faced by you by the get help button.</li>
+    </ul>
+  </div>
+
+  <h1 class="text text-center">Payment</h1>
+  <p class="text text-center">Scan the QR code below to make a payment:</p>
+  <div class="d-flex justify-content-center">
+  <form method="POST">
+    {% csrf_token %}
+    <label class="mb-2"> Enter the UPI ID : </label>
+    <input type="text" name="upi" class="form-control"  autocomplete="__away" required>
+    <button type="submit" class="btn btn-block btn-primary mt-2 fw-semibold text-uppercase" value="insert"> Pay </button>
+  </form>
+  </div>
+  <div class="d-flex justify-content-center mt-3">
+  <img src="{{ course.file.url }}" alt="Combined QR Code" style="width: 250px;" class="border me-3">
+  <img src="{% static 'images/admin.png' %}" alt="Combined QR Code" style="width: 250px;" class="border">
+  </div>
+
 </div>
 {% endblock %}
